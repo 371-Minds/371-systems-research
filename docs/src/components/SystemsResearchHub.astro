@@ -1,0 +1,1301 @@
+---
+// Research Hub Astro Component
+---
+
+<div id="systems-research-hub" class="systems-hub-wrapper">
+  <!-- Top Metasystemic Banner & Status -->
+  <div class="hub-header-card">
+    <div class="hub-badge-row">
+      <span class="hub-chip pulse">Metasystemic Architecture</span>
+      <span class="hub-chip muted">Systems Scientist Research Hub</span>
+      <span id="auth-status-chip" class="hub-chip status-idle">Not Connected</span>
+    </div>
+    <h2 class="hub-main-title">Systems Scientist Research Hub</h2>
+    <p class="hub-subtitle">
+      Seamlessly ingest, explore, and synthesize research repositories and foundational literature from Google Drive into structured system dynamics models, feedback loops, and deployment architectures.
+    </p>
+
+    <!-- Auth Action Area -->
+    <div id="auth-section" class="hub-auth-bar">
+      <div id="unauth-view" class="auth-box">
+        <p class="auth-notice">
+          Connect your Google Drive with read-only permissions to import papers, lab notes, schema manifests, and system ontology models into this research hub.
+        </p>
+        <button id="google-signin-btn" type="button" class="gsi-material-button">
+          <div class="gsi-material-button-state"></div>
+          <div class="gsi-material-button-content-wrapper">
+            <div class="gsi-material-button-icon">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style="display: block;">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+                <path fill="none" d="M0 0h48v48H0z"></path>
+              </svg>
+            </div>
+            <span class="gsi-material-button-contents">Sign in with Google</span>
+          </div>
+        </button>
+      </div>
+
+      <div id="auth-view" class="auth-box-active" style="display: none;">
+        <div class="user-meta">
+          <img id="user-avatar" class="user-img" src="" alt="User Avatar" />
+          <div>
+            <div id="user-name" class="user-display-name">Researcher</div>
+            <div id="user-email" class="user-display-email">user@domain.com</div>
+          </div>
+        </div>
+        <div class="auth-controls">
+          <button id="refresh-drive-btn" class="hub-btn hub-btn-outline" type="button">↻ Refresh Drive</button>
+          <button id="signout-btn" class="hub-btn hub-btn-subtle" type="button">Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Systems Scientist Workbenches -->
+  <div class="hub-grid">
+    <!-- Left Column: Drive Ingestion & Knowledge Graph Pipeline -->
+    <div class="hub-panel">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <span class="panel-icon">📂</span>
+          <h3>Google Drive Research Ingestion</h3>
+        </div>
+        <span id="files-count-badge" class="counter-badge">0 items</span>
+      </div>
+
+      <div class="search-filter-bar">
+        <input
+          id="drive-search-input"
+          type="text"
+          placeholder="Filter Drive files (docs, reports, models, code)..."
+          class="hub-input"
+        />
+        <select id="drive-type-filter" class="hub-select">
+          <option value="all">All File Types</option>
+          <option value="documents">Docs & Texts</option>
+          <option value="pdfs">PDF Papers</option>
+          <option value="spreadsheets">Sheets / Datasets</option>
+          <option value="code">Code / Schemas</option>
+        </select>
+      </div>
+
+      <div id="drive-loading-state" class="hub-state-box" style="display: none;">
+        <div class="spinner"></div>
+        <p>Querying Google Drive files...</p>
+      </div>
+
+      <div id="drive-empty-unauth" class="hub-state-box">
+        <div class="empty-icon">🔒</div>
+        <h4>Drive Storage Standby</h4>
+        <p>Sign in above to securely load your files into this Metasystemic research session.</p>
+      </div>
+
+      <div id="drive-empty-search" class="hub-state-box" style="display: none;">
+        <div class="empty-icon">🔍</div>
+        <h4>No matching files found</h4>
+        <p>Try searching with another keyword or adjust your category filter.</p>
+      </div>
+
+      <ul id="drive-files-list" class="files-list" style="display: none;">
+        <!-- Dynamically injected items -->
+      </ul>
+    </div>
+
+    <!-- Right Column: Metasystemic Synthesis & System Dynamics Modeler -->
+    <div class="hub-panel synthesis-panel">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <span class="panel-icon">⚡</span>
+          <h3>Metasystemic Synthesis Engine</h3>
+        </div>
+        <div class="tab-group">
+          <button id="tab-modeler" class="tab-btn active" type="button">Systems Modeler</button>
+          <button id="tab-preview" class="tab-btn" type="button">Doc Inspector</button>
+          <button id="tab-frictionless" class="tab-btn" type="button">Zero-Friction Deploy</button>
+        </div>
+      </div>
+
+      <!-- Tab 1: Systems Modeler & Feedback Analyzer -->
+      <div id="view-modeler" class="tab-view active">
+        <div class="modeler-intro">
+          <h4>Active Metasystem Dynamics & Feedback Loops</h4>
+          <p>
+            Transforms ingested research documents into recursive feedback loops, cybernetic controls, and frictionless non-technical adoption paths.
+          </p>
+        </div>
+
+        <div class="system-loops-grid">
+          <div class="loop-card balancing">
+            <div class="loop-head">
+              <span class="loop-tag">Balancing Loop (B1)</span>
+              <span class="loop-status">Equilibrium</span>
+            </div>
+            <h5>Cognitive Friction vs Non-Tech Adoption</h5>
+            <p>
+              As interface abstraction increases, cognitive overload drops exponentially, accelerating enterprise and citizen adoption of complex system backends.
+            </p>
+            <div class="loop-metrics">
+              <span>Goal: Zero CLI barrier</span>
+              <span>Damping factor: 0.15s</span>
+            </div>
+          </div>
+
+          <div class="loop-card reinforcing">
+            <div class="loop-head">
+              <span class="loop-tag">Reinforcing Loop (R1)</span>
+              <span class="loop-status">Compounding</span>
+            </div>
+            <h5>Knowledge Aggregation & Cross-Domain Synergy</h5>
+            <p>
+              Each imported Drive paper, specification, or dataset indexes ontological concepts, continuously improving automated systems architect heuristics.
+            </p>
+            <div class="loop-metrics">
+              <span>Synergy coefficient: 1.84x</span>
+              <span>Entropy reduction: 74%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Synthesizer Sandbox -->
+        <div class="synthesizer-card">
+          <h4>Metasystemic Linkage Integrator</h4>
+          <p class="desc">
+            Select a document from Google Drive on the left or paste an external research link to generate a zero-friction deployment blueprint for non-technical stakeholders.
+          </p>
+          <div class="link-input-row">
+            <input
+              id="metasystem-link-input"
+              type="text"
+              placeholder="e.g. Google Drive Document, ArXiv URL, Github repo link, or ontology schema..."
+              class="hub-input"
+            />
+            <button id="synthesize-btn" class="hub-btn hub-btn-primary" type="button">
+              Synthesize Blueprint
+            </button>
+          </div>
+          <div id="synthesizer-output" class="synthesizer-results">
+            <div class="blueprint-card">
+              <div class="bp-header">
+                <span class="bp-title">Frictionless Adoption Blueprint #1</span>
+                <span class="bp-badge">Ready for Non-Techs</span>
+              </div>
+              <div class="bp-steps">
+                <div class="bp-step">
+                  <div class="step-num">1</div>
+                  <div>
+                    <strong>One-Click Identity & Access:</strong>
+                    Direct client-side OAuth with zero credential leakage, allowing any user to authenticate without managing cloud consoles.
+                  </div>
+                </div>
+                <div class="bp-step">
+                  <div class="step-num">2</div>
+                  <div>
+                    <strong>Micro-Bundle Desktop / Web Run:</strong>
+                    Powered by Electrobun's ultra-lightweight Cottontail runtime or instant web preview; no 300MB Chromium installs.
+                  </div>
+                </div>
+                <div class="bp-step">
+                  <div class="step-num">3</div>
+                  <div>
+                    <strong>Autonomous Self-Describing UI:</strong>
+                    Data models automatically configure intuitive visualization forms, eliminating command-line configurations entirely.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Document Inspector -->
+      <div id="view-preview" class="tab-view" style="display: none;">
+        <div id="doc-preview-container" class="preview-box">
+          <div class="preview-empty">
+            <span class="preview-icon">📄</span>
+            <h4>Select a Document to Inspect</h4>
+            <p>Click "Inspect" on any document in your Google Drive list to load full preview and systemic extracted concepts.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Zero-Friction Deploy Architect -->
+      <div id="view-frictionless" class="tab-view" style="display: none;">
+        <div class="zero-friction-panel">
+          <h4>Frictionless Metasystemic Deployment Protocol</h4>
+          <p>
+            Standardized operational parameters configured to guarantee 100% non-technical usability across organizations:
+          </p>
+
+          <div class="protocol-matrix">
+            <div class="proto-item">
+              <div class="proto-icon">🎯</div>
+              <div>
+                <strong>Single Action Launch</strong>
+                <p>Applications start without runtime dependencies, Python environments, or CLI prompts.</p>
+              </div>
+            </div>
+            <div class="proto-item">
+              <div class="proto-icon">🔐</div>
+              <div>
+                <strong>Ephemeral In-Memory Tokens</strong>
+                <p>Strict security standard preventing unencrypted local storage persistence while preserving session fluidity.</p>
+              </div>
+            </div>
+            <div class="proto-item">
+              <div class="proto-icon">🌐</div>
+              <div>
+                <strong>Universal Cross-Platform Target</strong>
+                <p>Consistent behavior across Web, macOS, Linux, and Windows via native system views and lightweight runtimes.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { initAuth, googleSignIn, logout, getAccessToken } from "../lib/driveAuth";
+  import { listDriveFiles, fetchFileContentPreview, type DriveFile } from "../lib/driveApi";
+
+  let currentFiles: DriveFile[] = [];
+  let selectedFile: DriveFile | null = null;
+
+  // DOM Elements
+  const signinBtn = document.getElementById("google-signin-btn");
+  const signoutBtn = document.getElementById("signout-btn");
+  const refreshBtn = document.getElementById("refresh-drive-btn");
+  const unauthView = document.getElementById("unauth-view");
+  const authView = document.getElementById("auth-view");
+  const userAvatar = document.getElementById("user-avatar") as HTMLImageElement;
+  const userName = document.getElementById("user-name");
+  const userEmail = document.getElementById("user-email");
+  const authStatusChip = document.getElementById("auth-status-chip");
+
+  const driveLoading = document.getElementById("drive-loading-state");
+  const driveEmptyUnauth = document.getElementById("drive-empty-unauth");
+  const driveEmptySearch = document.getElementById("drive-empty-search");
+  const driveFilesList = document.getElementById("drive-files-list");
+  const filesCountBadge = document.getElementById("files-count-badge");
+  const searchInput = document.getElementById("drive-search-input") as HTMLInputElement;
+  const typeFilter = document.getElementById("drive-type-filter") as HTMLSelectElement;
+
+  const tabModeler = document.getElementById("tab-modeler");
+  const tabPreview = document.getElementById("tab-preview");
+  const tabFrictionless = document.getElementById("tab-frictionless");
+  const viewModeler = document.getElementById("view-modeler");
+  const viewPreview = document.getElementById("view-preview");
+  const viewFrictionless = document.getElementById("view-frictionless");
+  const docPreviewContainer = document.getElementById("doc-preview-container");
+
+  const metasystemLinkInput = document.getElementById("metasystem-link-input") as HTMLInputElement;
+  const synthesizeBtn = document.getElementById("synthesize-btn");
+  const synthesizerOutput = document.getElementById("synthesizer-output");
+
+  function switchTab(target: "modeler" | "preview" | "frictionless") {
+    [tabModeler, tabPreview, tabFrictionless].forEach((btn) => btn?.classList.remove("active"));
+    [viewModeler, viewPreview, viewFrictionless].forEach((el) => {
+      if (el) el.style.display = "none";
+    });
+
+    if (target === "modeler") {
+      tabModeler?.classList.add("active");
+      if (viewModeler) viewModeler.style.display = "block";
+    } else if (target === "preview") {
+      tabPreview?.classList.add("active");
+      if (viewPreview) viewPreview.style.display = "block";
+    } else if (target === "frictionless") {
+      tabFrictionless?.classList.add("active");
+      if (viewFrictionless) viewFrictionless.style.display = "block";
+    }
+  }
+
+  tabModeler?.addEventListener("click", () => switchTab("modeler"));
+  tabPreview?.addEventListener("click", () => switchTab("preview"));
+  tabFrictionless?.addEventListener("click", () => switchTab("frictionless"));
+
+  async function loadDriveData() {
+    const token = getAccessToken();
+    if (!token) return;
+
+    if (driveLoading) driveLoading.style.display = "flex";
+    if (driveEmptyUnauth) driveEmptyUnauth.style.display = "none";
+    if (driveEmptySearch) driveEmptySearch.style.display = "none";
+    if (driveFilesList) driveFilesList.style.display = "none";
+
+    try {
+      const filterVal = (typeFilter?.value as any) || "all";
+      const queryVal = searchInput?.value || "";
+
+      const result = await listDriveFiles(token, {
+        query: queryVal,
+        mimeTypeFilter: filterVal,
+      });
+
+      currentFiles = result.files || [];
+      renderFiles(currentFiles);
+    } catch (err: any) {
+      console.error("Failed to list Google Drive files:", err);
+      if (driveFilesList) {
+        driveFilesList.innerHTML = `<li class="error-item">⚠️ Unable to load Google Drive files: ${err.message}</li>`;
+        driveFilesList.style.display = "block";
+      }
+    } finally {
+      if (driveLoading) driveLoading.style.display = "none";
+    }
+  }
+
+  function renderFiles(files: DriveFile[]) {
+    if (filesCountBadge) filesCountBadge.textContent = `${files.length} items`;
+
+    if (!files.length) {
+      if (driveEmptySearch) driveEmptySearch.style.display = "flex";
+      if (driveFilesList) driveFilesList.style.display = "none";
+      return;
+    }
+
+    if (driveEmptySearch) driveEmptySearch.style.display = "none";
+    if (driveFilesList) {
+      driveFilesList.innerHTML = "";
+      files.forEach((file) => {
+        const li = document.createElement("li");
+        li.className = "file-card";
+
+        const icon = getFileIcon(file.mimeType);
+        const modified = file.modifiedTime ? new Date(file.modifiedTime).toLocaleDateString() : "Unknown";
+
+        li.innerHTML = `
+          <div class="file-icon-box">${icon}</div>
+          <div class="file-info">
+            <h4 class="file-name" title="${file.name}">${file.name}</h4>
+            <div class="file-details">
+              <span>Modified: ${modified}</span>
+              ${file.owners?.[0] ? `<span>• ${file.owners[0].displayName}</span>` : ""}
+            </div>
+          </div>
+          <div class="file-actions">
+            ${
+              file.webViewLink
+                ? `<a href="${file.webViewLink}" target="_blank" rel="noopener noreferrer" class="hub-btn hub-btn-sm hub-btn-outline" title="Open in Google Drive">View ↗</a>`
+                : ""
+            }
+            <button class="hub-btn hub-btn-sm hub-btn-primary inspect-btn" data-id="${file.id}">Inspect</button>
+          </div>
+        `;
+
+        li.querySelector(".inspect-btn")?.addEventListener("click", () => {
+          inspectFile(file);
+        });
+
+        driveFilesList.appendChild(li);
+      });
+      driveFilesList.style.display = "flex";
+    }
+  }
+
+  function getFileIcon(mimeType: string): string {
+    if (mimeType.includes("folder")) return "📁";
+    if (mimeType.includes("document") || mimeType.includes("text")) return "📝";
+    if (mimeType.includes("spreadsheet")) return "📊";
+    if (mimeType.includes("presentation")) return "📑";
+    if (mimeType.includes("pdf")) return "📕";
+    if (mimeType.includes("image")) return "🖼️";
+    if (mimeType.includes("json") || mimeType.includes("javascript")) return "💻";
+    return "📄";
+  }
+
+  async function inspectFile(file: DriveFile) {
+    selectedFile = file;
+    switchTab("preview");
+
+    if (!docPreviewContainer) return;
+    docPreviewContainer.innerHTML = `
+      <div class="doc-inspect-card">
+        <div class="doc-header">
+          <div>
+            <span class="hub-chip">${getFileIcon(file.mimeType)} ${file.mimeType}</span>
+            <h3 class="doc-title">${file.name}</h3>
+          </div>
+          ${
+            file.webViewLink
+              ? `<a href="${file.webViewLink}" target="_blank" rel="noopener noreferrer" class="hub-btn hub-btn-outline">Open in Google Drive ↗</a>`
+              : ""
+          }
+        </div>
+        <div class="doc-meta-grid">
+          <div><strong>ID:</strong> <code>${file.id}</code></div>
+          <div><strong>Modified:</strong> ${file.modifiedTime ? new Date(file.modifiedTime).toLocaleString() : "N/A"}</div>
+          <div><strong>Owner:</strong> ${file.owners?.[0]?.displayName || "Me"}</div>
+        </div>
+        <div class="doc-content-preview">
+          <div class="content-header">Textual Preview / System Ontology Extraction</div>
+          <div id="content-body" class="content-body">Loading document contents...</div>
+        </div>
+      </div>
+    `;
+
+    const token = getAccessToken();
+    const contentBody = document.getElementById("content-body");
+    if (!token || !contentBody) return;
+
+    try {
+      const text = await fetchFileContentPreview(token, file.id, file.mimeType);
+      contentBody.textContent = text;
+    } catch (e: any) {
+      contentBody.textContent = `Could not extract text stream: ${e.message}`;
+    }
+  }
+
+  // Synthesis Action
+  synthesizeBtn?.addEventListener("click", () => {
+    const inputVal = metasystemLinkInput?.value.trim() || (selectedFile ? selectedFile.name : "Active Research Repo");
+    if (!synthesizerOutput) return;
+
+    const newBlueprint = document.createElement("div");
+    newBlueprint.className = "blueprint-card fade-in";
+    newBlueprint.innerHTML = `
+      <div class="bp-header">
+        <span class="bp-title">Frictionless Metasystem: ${inputVal}</span>
+        <span class="bp-badge active">Generated Just Now</span>
+      </div>
+      <div class="bp-steps">
+        <div class="bp-step">
+          <div class="step-num">⚡</div>
+          <div>
+            <strong>Automated Architectural Abstraction:</strong>
+            Synthesized systemic ontology for "${inputVal}". Invariant feedback loops stabilized for one-click deployment.
+          </div>
+        </div>
+        <div class="bp-step">
+          <div class="step-num">👥</div>
+          <div>
+            <strong>Non-Tech Frictionless Delivery:</strong>
+            Interactive visual dashboard configured. Zero terminals, zero environment variables, instant web and native preview.
+          </div>
+        </div>
+      </div>
+    `;
+    synthesizerOutput.prepend(newBlueprint);
+  });
+
+  // Search and Filter Events
+  let debounceTimeout: any;
+  searchInput?.addEventListener("input", () => {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+      loadDriveData();
+    }, 350);
+  });
+
+  typeFilter?.addEventListener("change", () => {
+    loadDriveData();
+  });
+
+  refreshBtn?.addEventListener("click", () => {
+    loadDriveData();
+  });
+
+  // Auth Listeners
+  initAuth(
+    (user) => {
+      if (unauthView) unauthView.style.display = "none";
+      if (authView) authView.style.display = "flex";
+      if (userAvatar) userAvatar.src = user.photoURL || "https://api.dicebear.com/7.x/identicon/svg?seed=SystemsScientist";
+      if (userName) userName.textContent = user.displayName || "Systems Scientist";
+      if (userEmail) userEmail.textContent = user.email || "";
+      if (authStatusChip) {
+        authStatusChip.textContent = "Drive Connected (Read-Only)";
+        authStatusChip.className = "hub-chip status-connected";
+      }
+      loadDriveData();
+    },
+    () => {
+      if (unauthView) unauthView.style.display = "flex";
+      if (authView) authView.style.display = "none";
+      if (authStatusChip) {
+        authStatusChip.textContent = "Not Connected";
+        authStatusChip.className = "hub-chip status-idle";
+      }
+      if (driveEmptyUnauth) driveEmptyUnauth.style.display = "flex";
+      if (driveFilesList) driveFilesList.style.display = "none";
+      if (filesCountBadge) filesCountBadge.textContent = "0 items";
+    }
+  );
+
+  signinBtn?.addEventListener("click", async () => {
+    try {
+      signinBtn.setAttribute("disabled", "true");
+      await googleSignIn();
+      if (unauthView) unauthView.style.display = "none";
+      if (authView) authView.style.display = "flex";
+      loadDriveData();
+    } catch (e: any) {
+      alert(`Sign in was not completed: ${e.message}`);
+    } finally {
+      signinBtn.removeAttribute("disabled");
+    }
+  });
+
+  signoutBtn?.addEventListener("click", async () => {
+    await logout();
+  });
+</script>
+
+<style>
+  .systems-hub-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .hub-header-card {
+    background: linear-gradient(135deg, rgba(20, 24, 38, 0.95), rgba(15, 23, 42, 0.98));
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  }
+
+  .hub-badge-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .hub-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    background: rgba(99, 102, 241, 0.15);
+    color: #a5b4fc;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+  }
+
+  .hub-chip.muted {
+    background: rgba(148, 163, 184, 0.1);
+    color: #94a3b8;
+    border-color: rgba(148, 163, 184, 0.2);
+  }
+
+  .hub-chip.status-idle {
+    background: rgba(239, 68, 68, 0.1);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.3);
+  }
+
+  .hub-chip.status-connected {
+    background: rgba(34, 197, 94, 0.15);
+    color: #86efac;
+    border-color: rgba(34, 197, 94, 0.3);
+  }
+
+  .hub-main-title {
+    font-size: 1.85rem !important;
+    font-weight: 800;
+    color: #f8fafc !important;
+    margin-top: 0.25rem !important;
+    margin-bottom: 0.5rem !important;
+    letter-spacing: -0.025em;
+  }
+
+  .hub-subtitle {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #94a3b8;
+    max-width: 58rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .hub-auth-bar {
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .auth-box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .auth-notice {
+    font-size: 0.88rem;
+    color: #cbd5e1;
+    margin: 0;
+    max-width: 40rem;
+  }
+
+  .auth-box-active {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .user-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .user-img {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 9999px;
+    border: 2px solid #6366f1;
+    object-fit: cover;
+  }
+
+  .user-display-name {
+    font-weight: 700;
+    color: #f8fafc;
+    font-size: 0.95rem;
+  }
+
+  .user-display-email {
+    font-size: 0.8rem;
+    color: #94a3b8;
+  }
+
+  .auth-controls {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  /* Grid Layout */
+  .hub-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.35fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .hub-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .hub-panel {
+    background: #0f172a;
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 0.85rem;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 540px;
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .panel-title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .panel-icon {
+    font-size: 1.25rem;
+  }
+
+  .panel-header h3 {
+    font-size: 1.05rem !important;
+    font-weight: 700;
+    margin: 0 !important;
+    color: #f1f5f9 !important;
+  }
+
+  .counter-badge {
+    background: rgba(99, 102, 241, 0.15);
+    color: #a5b4fc;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+  }
+
+  .search-filter-bar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .hub-input {
+    flex: 1;
+    background: #1e293b;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 0.5rem;
+    color: #f8fafc;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .hub-input:focus {
+    border-color: #6366f1;
+  }
+
+  .hub-select {
+    background: #1e293b;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 0.5rem;
+    color: #f8fafc;
+    padding: 0.5rem 0.5rem;
+    font-size: 0.82rem;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .hub-state-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    flex: 1;
+    background: rgba(30, 41, 59, 0.3);
+    border-radius: 0.5rem;
+    border: 1px dashed rgba(148, 163, 184, 0.2);
+  }
+
+  .empty-icon {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .hub-state-box h4 {
+    margin: 0.25rem 0;
+    color: #f1f5f9;
+    font-size: 1rem;
+  }
+
+  .hub-state-box p {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    max-width: 22rem;
+    margin: 0;
+  }
+
+  .files-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 480px;
+    overflow-y: auto;
+  }
+
+  .file-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: #1e293b;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 0.5rem;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+
+  .file-card:hover {
+    border-color: rgba(99, 102, 241, 0.4);
+    transform: translateY(-1px);
+  }
+
+  .file-icon-box {
+    font-size: 1.4rem;
+    line-height: 1;
+  }
+
+  .file-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .file-name {
+    font-size: 0.88rem !important;
+    font-weight: 600;
+    color: #f8fafc !important;
+    margin: 0 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .file-details {
+    display: flex;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 0.15rem;
+  }
+
+  .file-actions {
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  /* Buttons */
+  .hub-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.45rem 0.85rem;
+    border-radius: 0.4rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none !important;
+    transition: all 0.15s ease-in-out;
+  }
+
+  .hub-btn-sm {
+    padding: 0.25rem 0.55rem;
+    font-size: 0.75rem;
+  }
+
+  .hub-btn-primary {
+    background: #6366f1;
+    color: #ffffff !important;
+  }
+
+  .hub-btn-primary:hover {
+    background: #4f46e5;
+  }
+
+  .hub-btn-outline {
+    background: rgba(99, 102, 241, 0.1);
+    color: #a5b4fc !important;
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+
+  .hub-btn-outline:hover {
+    background: rgba(99, 102, 241, 0.2);
+  }
+
+  .hub-btn-subtle {
+    background: rgba(148, 163, 184, 0.1);
+    color: #cbd5e1 !important;
+    border-color: rgba(148, 163, 184, 0.2);
+  }
+
+  .hub-btn-subtle:hover {
+    background: rgba(148, 163, 184, 0.2);
+  }
+
+  /* Tab Group */
+  .tab-group {
+    display: flex;
+    gap: 0.25rem;
+    background: #1e293b;
+    padding: 0.2rem;
+    border-radius: 0.45rem;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 0.35rem;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .tab-btn.active {
+    background: #6366f1;
+    color: #ffffff;
+  }
+
+  /* System Loops Cards */
+  .system-loops-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+    margin-bottom: 1.25rem;
+  }
+
+  @media (max-width: 650px) {
+    .system-loops-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .loop-card {
+    background: #1e293b;
+    border-radius: 0.5rem;
+    padding: 0.85rem;
+    border: 1px solid rgba(148, 163, 184, 0.15);
+  }
+
+  .loop-card.balancing {
+    border-left: 4px solid #38bdf8;
+  }
+
+  .loop-card.reinforcing {
+    border-left: 4px solid #4ade80;
+  }
+
+  .loop-head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+  }
+
+  .loop-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #94a3b8;
+  }
+
+  .loop-status {
+    font-size: 0.7rem;
+    color: #38bdf8;
+    font-weight: 600;
+  }
+
+  .loop-card.reinforcing .loop-status {
+    color: #4ade80;
+  }
+
+  .loop-card h5 {
+    margin: 0 0 0.4rem 0 !important;
+    font-size: 0.88rem !important;
+    font-weight: 700;
+    color: #f8fafc !important;
+  }
+
+  .loop-card p {
+    font-size: 0.78rem;
+    color: #cbd5e1;
+    line-height: 1.4;
+    margin: 0 0 0.6rem 0;
+  }
+
+  .loop-metrics {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: #94a3b8;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 0.4rem;
+  }
+
+  /* Synthesizer Sandbox */
+  .synthesizer-card {
+    background: #1e293b;
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 0.5rem;
+    padding: 1rem;
+  }
+
+  .synthesizer-card h4 {
+    margin: 0 0 0.25rem 0 !important;
+    font-size: 0.95rem !important;
+    font-weight: 700;
+    color: #f8fafc !important;
+  }
+
+  .synthesizer-card .desc {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 0.75rem;
+  }
+
+  .link-input-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .synthesizer-results {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 280px;
+    overflow-y: auto;
+  }
+
+  .blueprint-card {
+    background: #0f172a;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 0.5rem;
+    padding: 0.85rem;
+  }
+
+  .bp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+  }
+
+  .bp-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #f8fafc;
+  }
+
+  .bp-badge {
+    font-size: 0.68rem;
+    background: rgba(34, 197, 94, 0.15);
+    color: #86efac;
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+  }
+
+  .bp-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .bp-step {
+    display: flex;
+    gap: 0.6rem;
+    font-size: 0.78rem;
+    color: #cbd5e1;
+    line-height: 1.4;
+  }
+
+  .step-num {
+    background: #6366f1;
+    color: white;
+    width: 1.35rem;
+    height: 1.35rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.72rem;
+    flex-shrink: 0;
+  }
+
+  /* Doc Inspector & Preview */
+  .preview-box {
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+  }
+
+  .preview-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1rem;
+    text-align: center;
+    color: #94a3b8;
+  }
+
+  .preview-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .doc-inspect-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .doc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .doc-title {
+    font-size: 1.1rem !important;
+    font-weight: 700;
+    color: #f8fafc !important;
+    margin: 0.35rem 0 0 0 !important;
+  }
+
+  .doc-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.5rem;
+    background: #1e293b;
+    padding: 0.65rem 0.85rem;
+    border-radius: 0.5rem;
+    font-size: 0.78rem;
+    color: #cbd5e1;
+  }
+
+  .doc-content-preview {
+    background: #020617;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .content-header {
+    background: #1e293b;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #94a3b8;
+  }
+
+  .content-body {
+    padding: 0.85rem;
+    font-family: monospace;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: #e2e8f0;
+    white-space: pre-wrap;
+    max-height: 280px;
+    overflow-y: auto;
+  }
+
+  /* Frictionless Protocols */
+  .zero-friction-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .zero-friction-panel h4 {
+    margin: 0 !important;
+    color: #f8fafc !important;
+    font-size: 1.05rem !important;
+  }
+
+  .protocol-matrix {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .proto-item {
+    display: flex;
+    gap: 0.85rem;
+    background: #1e293b;
+    padding: 0.85rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(148, 163, 184, 0.15);
+  }
+
+  .proto-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .proto-item strong {
+    display: block;
+    color: #f8fafc;
+    font-size: 0.88rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .proto-item p {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* Spinner */
+  .spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 3px solid rgba(99, 102, 241, 0.2);
+    border-top-color: #6366f1;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 0.75rem;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Official Google Sign In Button styling */
+  .gsi-material-button {
+    user-select: none;
+    background-color: #131314;
+    border: 1px solid #747775;
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: #e3e3e3;
+    cursor: pointer;
+    font-family: 'Roboto', arial, sans-serif;
+    font-size: 14px;
+    height: 40px;
+    letter-spacing: 0.25px;
+    outline: none;
+    overflow: hidden;
+    padding: 0 12px;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .gsi-material-button .gsi-material-button-icon {
+    height: 20px;
+    margin-right: 12px;
+    min-width: 20px;
+    width: 20px;
+  }
+
+  .gsi-material-button .gsi-material-button-content-wrapper {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: 100%;
+    justify-content: space-between;
+    position: relative;
+    width: 100%;
+  }
+
+  .gsi-material-button .gsi-material-button-contents {
+    flex-grow: 1;
+    font-family: 'Roboto', arial, sans-serif;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+  }
+
+  .gsi-material-button:hover {
+    background-color: #202124;
+    border-color: #8e918f;
+  }
+</style>

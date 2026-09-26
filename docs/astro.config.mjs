@@ -3,6 +3,10 @@ import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 
 export default defineConfig({
+  server: {
+    host: "0.0.0.0",
+    port: 3000,
+  },
   site: "https://framework.blackboard.sh",
   integrations: [
     starlight({
@@ -14,6 +18,12 @@ export default defineConfig({
         discord: "https://discord.gg/ueKE4tjaCE",
       },
       sidebar: [
+        {
+          label: "🔬 Systems Research Hub",
+          items: [
+            { label: "Research Workbench", link: "/systems-research-hub/" },
+          ],
+        },
         {
           label: "Electrobun",
           items: [

@@ -1,0 +1,8 @@
+{
+  "name": "Electrobun Documentation",
+  "description": "Documentation and guides for Electrobun, the ultra fast, tiny, cross-platform desktop application framework.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
