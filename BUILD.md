@@ -60,11 +60,13 @@ contains no runtime binaries or SDK source.
 
 ## Build Commands
 
+Use Bun 1.4.2 for dependencies; Hutch remains the build CLI and runtime
+orchestrator. `package/` and `kitchen/` have independent Bun lockfiles.
 All commands are run from the `/package` directory:
 
 ```bash
 cd electrobun/package
-npm ci
+bun install --frozen-lockfile
 
 # Full build with all platforms
 hutch build.ts

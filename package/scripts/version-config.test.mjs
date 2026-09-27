@@ -133,6 +133,8 @@ test("push:beta writes and stages the synchronized npm bootstrap identity", () =
 	assert.match(source, /updateNpmBootstrapVersion\(/);
 	assert.match(source, /writeFileSync\(npmBootstrapPath, npmBootstrap\)/);
 	assert.match(source, /"npm\/electrobun\/package\.json"/);
+	assert.match(source, /"package\/bun\.lock"/);
+	assert.doesNotMatch(source, /"package\/package-lock\.json"/);
 	assert.match(source, /createRustSdkVersionUpdates\(repoRoot, newVersion\)/);
 	assert.match(
 		source,
@@ -290,11 +292,17 @@ test("checked-in package, lock, Kitchen, and template product identities agree",
 		readFileSync(join(repositoryRoot, "package", "package.json"), "utf8"),
 	);
 	const packageLock = JSON.parse(
-		readFileSync(join(repositoryRoot, "package", "package-lock.json"), "utf8"),
+		readFileSync(join(repositoryRoot, "package", "bun.lock"), "utf8").replace(
+			/,(?=\s*[}\]])/g,
+			"",
+		),
 	);
 	const version = packageManifest.version;
-	assert.equal(packageLock.version, version);
-	assert.equal(packageLock.packages?.[""]?.version, version);
+	// Bun records dependency inputs, not the private source package's release version.
+	const lockRoot = packageLock.workspaces?.[""];
+	assert.equal(lockRoot?.name, packageManifest.name);
+	assert.deepEqual(lockRoot?.dependencies, packageManifest.dependencies);
+	assert.deepEqual(lockRoot?.devDependencies, packageManifest.devDependencies);
 	const npmBootstrapManifest = JSON.parse(
 		readFileSync(
 			join(repositoryRoot, "npm", "electrobun", "package.json"),

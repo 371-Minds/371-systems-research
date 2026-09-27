@@ -30,6 +30,11 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2.0.2
+        with:
+          bun-version-file: package.json
+
       - name: Verify release tag and version
         if: github.event_name == 'push'
         id: release-type

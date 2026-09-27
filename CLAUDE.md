@@ -5,10 +5,10 @@
 ### IMPORTANT: Build Commands
 
 **NEVER** run Electrobun from `node_modules`. Electrobun 2 uses Hutch as its
-build CLI, with npm only for this repository's development dependencies:
+build CLI, with Bun 1.4.2 for this repository's development dependencies:
 
 1. **From the package folder** (`/home/yoav/code/electrobun/package/`):
-   - `npm ci` - Installs the repository's pinned development dependencies
+   - `bun install --frozen-lockfile` - Installs the repository's pinned development dependencies
    - `hutch dev` - Builds and runs the Kitchen app in dev mode
    - `hutch dev:template <template-name>` - Builds and runs one repository template against the local devkit
    - `hutch dev:canary` - Builds the Kitchen app in canary mode

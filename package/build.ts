@@ -1090,14 +1090,7 @@ async function createDistFolder() {
 }
 
 async function installPackageDependencies() {
-	if (OS === "win") {
-		const comSpec =
-			process.env["ComSpec"] ??
-			join(process.env["SystemRoot"] ?? "C:\\Windows", "System32", "cmd.exe");
-		runInherited(comSpec, ["/D", "/S", "/C", "npm.cmd", "install"]);
-		return;
-	}
-	await $`npm install`;
+	runInherited(OS === "win" ? "bun.exe" : "bun", ["install", "--frozen-lockfile"]);
 }
 
 

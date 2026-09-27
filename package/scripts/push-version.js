@@ -131,7 +131,7 @@ execFileSync(
 	[
 		"add",
 		"package/package.json",
-		"package/package-lock.json",
+		"package/bun.lock",
 		"kitchen/hutch.config.ts",
 		"kitchen/electrobun.config.ts",
 		"npm/electrobun/package.json",

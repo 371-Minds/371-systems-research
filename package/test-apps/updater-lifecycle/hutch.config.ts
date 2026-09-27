@@ -9,6 +9,6 @@ export default {
 	electrobun: {
 		version: electrobunVersion,
 	},
-	packageManager: "npm",
+	packageManager: "bun",
 	scripts: {},
 };

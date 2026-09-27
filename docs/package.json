@@ -7,7 +7,11 @@
     "dev": "astro dev --host 0.0.0.0 --port 3000",
     "build": "astro build",
     "preview": "astro preview --host 0.0.0.0 --port 3000",
-    "lint": "astro check"
+    "lint": "astro check",
+    "test": "bun test ./scripts/project-boundary.test.mjs",
+    "check": "bun run lint && bun run test && bun run check:examples",
+    "check:examples": "bun scripts/check-code-examples.mjs",
+    "deploy": "wrangler pages deploy dist --project-name=framework-docs"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.30.0",

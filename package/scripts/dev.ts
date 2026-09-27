@@ -16,7 +16,6 @@ type CreateDevCommandsOptions = {
 	packageDir: string;
 	kitchenDir: string;
 	platform: string;
-	comSpec?: string;
 	devArgs?: string[];
 	skipPackageBuild?: boolean;
 };
@@ -26,24 +25,15 @@ export function createDevCommands({
 	packageDir,
 	kitchenDir,
 	platform,
-	comSpec = "cmd.exe",
 	devArgs = [],
 	skipPackageBuild = false,
 }: CreateDevCommandsOptions): DevCommand[] {
-	const installCommand: DevCommand =
-		platform === "win32"
-			? {
-					label: "Install Kitchen dependencies",
-					command: comSpec,
-					args: ["/D", "/S", "/C", "npm.cmd", "install"],
-					cwd: kitchenDir,
-				}
-			: {
-					label: "Install Kitchen dependencies",
-					command: "npm",
-					args: ["install"],
-					cwd: kitchenDir,
-				};
+	const installCommand: DevCommand = {
+		label: "Install Kitchen dependencies",
+		command: platform === "win32" ? "bun.exe" : "bun",
+		args: ["install", "--frozen-lockfile"],
+		cwd: kitchenDir,
+	};
 
 	const commands: DevCommand[] = [];
 	if (!skipPackageBuild) {
@@ -208,15 +198,11 @@ function main() {
 		prepareLocalStack(packageDir);
 	}
 	const hutchBinary = resolveHutchBinary(packageDir);
-	const comSpec =
-		process.env["ComSpec"] ??
-		join(process.env["SystemRoot"] ?? "C:\\Windows", "System32", "cmd.exe");
 	const commands = createDevCommands({
 		hutchBinary,
 		packageDir,
 		kitchenDir,
 		platform: process.platform,
-		comSpec,
 		devArgs: parsedArgs.devArgs,
 		skipPackageBuild: parsedArgs.local,
 	});

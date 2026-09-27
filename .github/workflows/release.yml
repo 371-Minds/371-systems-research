@@ -70,8 +70,11 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '18'
-          cache: npm
-          cache-dependency-path: package/package-lock.json
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2.0.2
+        with:
+          bun-version-file: package/package.json
 
       - name: Verify release tag and version
         id: release-type
