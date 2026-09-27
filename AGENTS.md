@@ -58,7 +58,7 @@ When designing or extending modules, assign responsibilities according to the 5 
 ## 🖥️ Non-Technical Frictionless UX Rules
 
 1. **Zero CLI Requirement:**
-   - End users must never be told to run terminal commands (`npm run`, `python script.py`, `curl`) to view output.
+   - End users must never be told to run terminal commands (`bun run`, `python script.py`, `curl`) to view output.
    - Provide visual UI action cards, automatic previews, or downloadable single-file HTML bundles (`exportStandaloneBundle`).
 2. **Self-Describing Interfaces:**
    - Data visualizers must translate technical fields into human-readable ontology cards (Entities, Balancing Feedback, Reinforcing Leverage).
@@ -69,8 +69,12 @@ When designing or extending modules, assign responsibilities according to the 5 
 
 ## 🧪 Verification & Tool Discipline
 
+- Use the Bun version pinned by `package.json` for contributor dependency installs and script execution; do not use npm to install development dependencies.
+- Install with `bun install --frozen-lockfile`. When intentionally changing dependencies, use Bun to regenerate the appropriate `bun.lock` and commit it; never hand-edit lockfiles or introduce `package-lock.json`.
+- The root workspace contains `docs` only. `package` and `kitchen` are independent Bun projects with their own lockfiles; do not merge their dependencies into the docs workspace.
+- Keep Hutch as the native build/dev CLI and retain npm registry publication, bootstrap acceptance, and release-versioning compatibility. Do not invoke Electrobun from `node_modules` or change template package-manager ownership as part of repository dependency maintenance.
 - Before committing changes:
-  1. Validate types and syntax via `lint_applet` (`astro check`).
-  2. Verify static build compilation via `compile_applet` (`astro build`).
-  3. Ensure local dev server remains active on port 3000.
-- Respect monorepo structure: Workspace packages reside in `/docs` while root orchestrates workspaces.
+  1. Run `bun run check` from the repository root: Astro diagnostics (`lint_applet` / `astro check`), package-manager regression tests, and documentation example validation.
+  2. Run `bun run build` to verify static compilation (`compile_applet` / `astro build`).
+  3. Keep `bun run dev` active on port 3000; use `bun run preview` after a build when checking production output.
+- CI must install the manifest-pinned Bun version before any Hutch task that delegates dependency installation to Bun.

@@ -16,6 +16,7 @@ import { fileURLToPath } from "node:url";
 
 type DevkitSourceManifest = {
 	private: boolean;
+	packageManager: string;
 	bin?: unknown;
 	exports: Record<string, string>;
 	dependencies?: Record<string, string>;
@@ -27,15 +28,16 @@ const manifest = JSON.parse(
 	readFileSync(join(packageDir, "package.json"), "utf8"),
 ) as DevkitSourceManifest;
 const lockfile = JSON.parse(
-	readFileSync(join(packageDir, "package-lock.json"), "utf8"),
+	readFileSync(join(packageDir, "bun.lock"), "utf8").replace(/,(?=\s*[}\]])/g, ""),
 ) as {
-	packages: Record<
+	workspaces: Record<
 		string,
 		{
 			dependencies?: Record<string, string>;
 			devDependencies?: Record<string, string>;
 		}
 	>;
+	packages: Record<string, unknown>;
 };
 const hutchConfigSource = readFileSync(
 	join(packageDir, "hutch.config.ts"),
@@ -53,13 +55,14 @@ function linkPackage(source: string, destination: string) {
 
 describe("private devkit source contract", () => {
 	test("keeps project installation explicit and the source package private", () => {
-		expect(hutchConfigSource).toMatch(/\bpackageManager:\s*"npm"/);
+		expect(hutchConfigSource).toMatch(/\bpackageManager:\s*"bun"/);
 		expect(hutchConfigSource).toMatch(
-			/\binstall:\s*\[\s*"hutch"\s*,\s*"pm"\s*,\s*"ci"\s*\]/,
+			/\binstall:\s*\[\s*"hutch"\s*,\s*"pm"\s*,\s*"install"\s*,\s*"--frozen-lockfile"\s*\]/,
 		);
 		expect(manifest.private).toBe(true);
+		expect(manifest.packageManager).toBe("bun@1.4.2");
 		expect(manifest.bin).toBeUndefined();
-		expect(existsSync(join(packageDir, "bun.lock"))).toBe(false);
+		expect(existsSync(join(packageDir, "bun.lock"))).toBe(true);
 		expect(Object.keys(manifest.dependencies ?? {}).sort()).toEqual([
 			"@types/bun",
 			"png-to-ico",
@@ -68,13 +71,35 @@ describe("private devkit source contract", () => {
 		]);
 		expect(Object.keys(manifest.devDependencies ?? {})).toEqual(["typescript"]);
 
-		const lockRoot = lockfile.packages[""];
+		expect(Object.keys(lockfile.workspaces)).toEqual([""]);
+		const lockRoot = lockfile.workspaces[""];
 		expect(lockRoot?.dependencies).toEqual(manifest.dependencies);
 		expect(lockRoot?.devDependencies).toEqual(manifest.devDependencies);
 		for (const packageName of ["@babylonjs/core", "@types/three", "three"]) {
 			expect(manifest.dependencies?.[packageName]).toBeUndefined();
-			expect(lockfile.packages[`node_modules/${packageName}`]).toBeUndefined();
+			expect(lockfile.packages[packageName]).toBeUndefined();
 		}
+	});
+
+	test("native builds install dependencies without a command shell", () => {
+		const buildSource = readFileSync(join(packageDir, "build.ts"), "utf8");
+		expect(buildSource).toMatch(
+			/runInherited\(OS === "win" \? "bun\.exe" : "bun", \["install", "--frozen-lockfile"\]\)/,
+		);
+		expect(buildSource).not.toMatch(/npm(?:\.cmd)?["`\s]+install/);
+	});
+
+	test("the dependency-free updater fixture selects Bun without requiring a lockfile", () => {
+		const fixtureDir = join(packageDir, "test-apps", "updater-lifecycle");
+		const fixtureManifest = JSON.parse(
+			readFileSync(join(fixtureDir, "package.json"), "utf8"),
+		);
+		const fixtureConfig = readFileSync(join(fixtureDir, "hutch.config.ts"), "utf8");
+		expect(fixtureManifest.packageManager).toBe("bun@1.4.2");
+		expect(fixtureManifest.dependencies).toBeUndefined();
+		expect(fixtureManifest.devDependencies).toBeUndefined();
+		expect(fixtureConfig).toMatch(/\bpackageManager:\s*"bun"/);
+		expect(fixtureConfig).not.toContain("--frozen-lockfile");
 	});
 
 	test("a strict devkit consumer cannot import unrelated graphics libraries", () => {

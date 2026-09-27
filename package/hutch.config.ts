@@ -1,8 +1,8 @@
 // @hutch cli=0.26.0-canary.10 cottontail=0.6.0-canary.14
 export default {
-	packageManager: "npm",
+	packageManager: "bun",
 	scripts: {
-		install: ["hutch", "pm", "ci"],
+		install: ["hutch", "pm", "install", "--frozen-lockfile"],
 		start: "hutch src/sdks/main/index.ts",
 		"check-zig-version": "vendors/zig/zig version",
 		"check-rust-version": "vendors/rust/bin/rustc --version",

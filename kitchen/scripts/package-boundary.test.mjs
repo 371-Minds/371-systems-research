@@ -6,25 +6,24 @@ import { fileURLToPath } from "node:url";
 
 const kitchenRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 
-test("Kitchen keeps npm dependencies separate from Hutch tasks", () => {
+test("Kitchen keeps Bun dependencies separate from Hutch tasks", () => {
 	const manifest = JSON.parse(
 		readFileSync(join(kitchenRoot, "package.json"), "utf8"),
 	);
 	assert.equal(manifest.scripts, undefined);
+	assert.equal(manifest.packageManager, "bun@1.4.2");
 	assert.equal(manifest.dependencies.electrobun, undefined);
 	assert.equal(manifest.dependencies["@babylonjs/core"], "^7.45.0");
 	assert.equal(manifest.dependencies.three, "^0.165.0");
 
 	const lock = JSON.parse(
-		readFileSync(join(kitchenRoot, "package-lock.json"), "utf8"),
+		readFileSync(join(kitchenRoot, "bun.lock"), "utf8").replace(/,(?=\s*[}\]])/g, ""),
 	);
-	assert.deepEqual(lock.packages[""].dependencies, manifest.dependencies);
-	assert.deepEqual(lock.packages[""].devDependencies, manifest.devDependencies);
-	assert.equal(
-		Object.values(lock.packages).some((entry) => entry?.name === "electrobun"),
-		false,
-	);
-	assert.equal(existsSync(join(kitchenRoot, "bun.lock")), false);
+	assert.deepEqual(Object.keys(lock.workspaces), [""]);
+	assert.deepEqual(lock.workspaces[""].dependencies, manifest.dependencies);
+	assert.deepEqual(lock.workspaces[""].devDependencies, manifest.devDependencies);
+	assert.equal(lock.packages.electrobun, undefined);
+	assert.equal(existsSync(join(kitchenRoot, "bun.lock")), true);
 });
 
 test("Kitchen resolves tasks and SDK types through Hutch", () => {
@@ -36,7 +35,7 @@ test("Kitchen resolves tasks and SDK types through Hutch", () => {
 	const packageVersion = JSON.parse(
 		readFileSync(join(kitchenRoot, "..", "package", "package.json"), "utf8"),
 	).version;
-	assert.match(hutch, /\bpackageManager:\s*"npm"/);
+	assert.match(hutch, /\bpackageManager:\s*"bun"/);
 	assert.equal(
 		hutch.match(/\belectrobun:\s*\{\s*version:\s*"([^"]+)"/)?.[1],
 		packageVersion,
@@ -61,7 +60,7 @@ test("Kitchen resolves tasks and SDK types through Hutch", () => {
 		"start:canary",
 	]);
 	for (const command of [
-		'install: ["hutch", "pm", "ci"]',
+		'install: ["hutch", "pm", "install", "--frozen-lockfile"]',
 		'start: ["hutch", "electrobun", "run"]',
 		'dev: ["hutch", "electrobun", "dev"]',
 		'matrix: ["hutch", "scripts/kitchen-matrix.ts"]',

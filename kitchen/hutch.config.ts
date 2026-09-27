@@ -3,9 +3,9 @@ export default {
 	electrobun: {
 		version: "2.0.2-beta.15",
 	},
-	packageManager: "npm",
+	packageManager: "bun",
 	scripts: {
-		install: ["hutch", "pm", "ci"],
+		install: ["hutch", "pm", "install", "--frozen-lockfile"],
 		start: ["hutch", "electrobun", "run"],
 		dev: ["hutch", "electrobun", "dev"],
 		matrix: ["hutch", "scripts/kitchen-matrix.ts"],

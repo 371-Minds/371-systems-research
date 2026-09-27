@@ -16,13 +16,11 @@ function assertArray(actual: string[], expected: string[], message: string) {
 const packageDir = join("C:\\work tree", "electrobun", "package");
 const kitchenDir = join("C:\\work tree", "electrobun", "kitchen");
 const hutchBinary = "hutch";
-const comSpec = "C:\\Windows\\System32\\cmd.exe";
 const windowsCommands = createDevCommands({
 	hutchBinary,
 	packageDir,
 	kitchenDir,
 	platform: "win32",
-	comSpec,
 	devArgs: ["--watch"],
 });
 
@@ -30,13 +28,13 @@ assert(windowsCommands.length === 3, "Windows dev plan should have three command
 assert(windowsCommands[0]?.command === hutchBinary, "Package build should use resolved Hutch");
 assertArray(windowsCommands[0]?.args ?? [], [join(packageDir, "build.ts")], "Package build argv");
 assert(windowsCommands[0]?.cwd === packageDir, "Package build cwd mismatch");
-assert(windowsCommands[1]?.command === comSpec, "Windows npm install should use ComSpec");
+assert(windowsCommands[1]?.command === "bun.exe", "Windows install should execute native Bun");
 assertArray(
 	windowsCommands[1]?.args ?? [],
-	["/D", "/S", "/C", "npm.cmd", "install"],
-	"Windows npm install argv",
+	["install", "--frozen-lockfile"],
+	"Windows Bun install argv",
 );
-assert(windowsCommands[1]?.cwd === kitchenDir, "Kitchen npm install cwd mismatch");
+assert(windowsCommands[1]?.cwd === kitchenDir, "Kitchen Bun install cwd mismatch");
 assert(windowsCommands[2]?.command === hutchBinary, "Kitchen launch should reuse resolved Hutch");
 assertArray(
 	windowsCommands[2]?.args ?? [],
@@ -64,8 +62,8 @@ const posixCommands = createDevCommands({
 	kitchenDir: "/tmp/electrobun/kitchen",
 	platform: "linux",
 });
-assert(posixCommands[1]?.command === "npm", "POSIX npm install should execute npm directly");
-assertArray(posixCommands[1]?.args ?? [], ["install"], "POSIX npm install argv");
+assert(posixCommands[1]?.command === "bun", "POSIX install should execute Bun directly");
+assertArray(posixCommands[1]?.args ?? [], ["install", "--frozen-lockfile"], "POSIX Bun install argv");
 
 const localArgs = parseDevArgs(["--watch", "--local"]);
 assert(localArgs.local, "Local dev args should enable local stack mode");
@@ -98,7 +96,6 @@ const matrixCommands = createMatrixDevCommands({
 	packageDir,
 	kitchenDir,
 	platform: "win32",
-	comSpec,
 	matrixArgs: ["--full", "--jobs=2"],
 });
 assert(matrixCommands.length === 3, "Matrix dev plan should prepare package and Kitchen");

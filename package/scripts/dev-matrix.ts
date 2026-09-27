@@ -1,4 +1,4 @@
-import { join, resolve } from "node:path";
+import { resolve } from "node:path";
 import {
 	createDevCommands,
 	parseDevArgs,
@@ -13,7 +13,6 @@ type CreateMatrixDevCommandsOptions = {
 	packageDir: string;
 	kitchenDir: string;
 	platform: string;
-	comSpec?: string;
 	matrixArgs?: string[];
 	skipPackageBuild?: boolean;
 };
@@ -23,7 +22,6 @@ export function createMatrixDevCommands({
 	packageDir,
 	kitchenDir,
 	platform,
-	comSpec = "cmd.exe",
 	matrixArgs = [],
 	skipPackageBuild = false,
 }: CreateMatrixDevCommandsOptions): DevCommand[] {
@@ -32,7 +30,6 @@ export function createMatrixDevCommands({
 		packageDir,
 		kitchenDir,
 		platform,
-		comSpec,
 		skipPackageBuild,
 	});
 	commands[commands.length - 1] = {
@@ -52,15 +49,11 @@ async function main(): Promise<void> {
 	if (parsedArgs.local) prepareLocalStack(packageDir);
 
 	const hutchBinary = resolveHutchBinary(packageDir);
-	const comSpec =
-		process.env["ComSpec"] ??
-		join(process.env["SystemRoot"] ?? "C:\\Windows", "System32", "cmd.exe");
 	const commands = createMatrixDevCommands({
 		hutchBinary,
 		packageDir,
 		kitchenDir,
 		platform: process.platform,
-		comSpec,
 		matrixArgs: parsedArgs.devArgs,
 		skipPackageBuild: parsedArgs.local,
 	});

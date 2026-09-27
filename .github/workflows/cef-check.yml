@@ -16,6 +16,11 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2.0.2
+        with:
+          bun-version-file: package/package.json
+
       - name: Install Linux build dependencies
         run: |
           sudo apt-get update

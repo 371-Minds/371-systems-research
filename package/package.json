@@ -2,6 +2,7 @@
 	"name": "electrobun",
 	"version": "2.0.2-beta.15",
 	"private": true,
+	"packageManager": "bun@1.4.2",
 	"description": "Build ultra fast, tiny, and cross-platform desktop apps with Typescript.",
 	"license": "MIT",
 	"author": "Blackboard Technologies Inc.",

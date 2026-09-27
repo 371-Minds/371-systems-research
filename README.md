@@ -39,24 +39,43 @@ A unified cybernetic workbench combining **Electrobun's ultra-lightweight deskto
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js (v18+) or Bun runtime
+- [Bun](https://bun.sh/) 1.4.2 (pinned in `package.json`) for dependency management and scripts
+- Node.js 22+ for Node-based Astro, Wrangler, and release tooling
 - Modern web browser (Chrome, Edge, Safari, Firefox)
 
-### Installation & Run
+### Developer Installation & Run
+
+These setup steps are for contributors hosting the workbench. Research users can use the hosted workbench or an exported standalone HTML bundle without a terminal.
 
 ```bash
 # Clone the repository
-git clone https://github.com/371-minds/systems-scientist-hub.git
-cd systems-scientist-hub
+git clone https://github.com/371-Minds/electrobun.git
+cd electrobun
 
-# Install workspace dependencies
-npm install
+# Install the exact workspace dependencies recorded in bun.lock
+bun install --frozen-lockfile
 
 # Start local development server on port 3000
-npm run dev
+bun run dev
 ```
 
 Visit `http://localhost:3000` or navigate directly to the workbench at `/systems-research-hub/`.
+
+### Verification & Preview
+
+Run contributor commands from the repository root:
+
+| Command | Purpose |
+|---|---|
+| `bun run lint` | Check Astro and TypeScript diagnostics |
+| `bun run test` | Run package-manager and docs boundary regression tests |
+| `bun run check` | Run lint, regression tests, and documentation example validation |
+| `bun run build` | Generate the static site in `docs/dist` |
+| `bun run preview` | Preview the built site on port 3000 |
+
+Use `bun install` when intentionally changing dependencies and commit the resulting `bun.lock`; use `--frozen-lockfile` for repeatable installs and CI. The root lockfile covers the `docs` workspace. Native development in `package` and `kitchen` uses separate Bun lockfiles and still builds through **Hutch**, not an Electrobun executable in `node_modules` (see [BUILD.md](BUILD.md)).
+
+Bun manages repository development dependencies; the dependency-free `npm/electrobun` bootstrap, npm registry publication/acceptance, and release versioning remain compatible with npm. Published templates retain their Hutch-owned dependency resolution.
 
 ---
 
@@ -65,6 +84,7 @@ Visit `http://localhost:3000` or navigate directly to the workbench at `/systems
 | Layer | Technology |
 |---|---|
 | **Framework** | [Astro](https://astro.build/) & [Starlight](https://starlight.astro.build/) |
+| **Package Manager** | [Bun](https://bun.sh/) with frozen lockfile installs |
 | **Desktop Runtime** | [Electrobun](https://framework.blackboard.sh/electrobun/) (Cottontail & System WebViews) |
 | **Authentication** | Google Workspace OAuth 2.0 (Client-side ephemeral) & Firebase Auth |
 | **Protocol** | Model Context Protocol (MCP) JSON-RPC 2.0 Schema |
@@ -91,6 +111,7 @@ Visit `http://localhost:3000` or navigate directly to the workbench at `/systems
 │   ├── astro.config.mjs                   # Astro & Starlight configuration
 │   └── package.json                       # Documentation workspace packages
 ├── package.json                           # Root monorepo workspace manifest
+├── bun.lock                               # Reproducible root/docs dependency graph
 ├── AGENTS.md                              # AI Agent & Metasystemic architectural directives
 └── README.md                              # Project documentation
 ```

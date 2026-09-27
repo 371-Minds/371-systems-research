@@ -1,21 +1,17 @@
 // @hutch cli=0.26.0-canary.10 cottontail=0.6.0-canary.14
 export default {
-  packageManager: "npm",
+  packageManager: "bun",
   scripts: {
-    install: ["hutch", "pm", "ci"],
-    dev: "hutch pm exec -- astro dev",
-    start: "hutch pm exec -- astro dev",
-    build: "hutch pm exec -- astro build",
-    preview: "hutch pm exec -- astro preview",
-    check: "hutch pm exec -- astro check && node scripts/check-code-examples.mjs",
-    "check:examples": "node scripts/check-code-examples.mjs",
-    "test:project-boundary": [
-      "node",
-      "--test",
-      "scripts/project-boundary.test.mjs",
-    ],
+    install: ["hutch", "pm", "install", "--frozen-lockfile"],
+    dev: "hutch pm run dev",
+    start: "hutch pm run dev",
+    build: "hutch pm run build",
+    preview: "hutch pm run preview",
+    check: "hutch pm run check",
+    "check:examples": "hutch pm run check:examples",
+    "test:project-boundary": "hutch pm run test",
     clean: "rm -rf dist .astro",
     deploy:
-      'hutch pm exec -- wrangler pages deploy dist --project-name=framework-docs --branch="$PAGES_BRANCH"',
+      'hutch pm run deploy --branch="$PAGES_BRANCH"',
   },
 };
