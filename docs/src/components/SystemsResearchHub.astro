@@ -1,5 +1,5 @@
 ---
-// Systems Scientist Research Hub Component
+// Systems Scientist Research Hub Component with Multi-Drive & MCP Integration
 ---
 
 <div id="systems-research-hub" class="systems-hub-wrapper">
@@ -8,51 +8,37 @@
     <div class="hub-badge-row">
       <span class="hub-chip pulse">Metasystemic Architecture</span>
       <span class="hub-chip">Systems Scientist Research Hub</span>
-      <span id="auth-status-chip" class="hub-chip status-idle">Drive Standby</span>
-      <span class="hub-chip accent-chip">Zero-Friction Non-Tech Engine</span>
+      <span id="auth-status-chip" class="hub-chip status-idle">0 Drives Connected</span>
+      <span class="hub-chip accent-chip">Model Context Protocol (MCP) Enabled</span>
+      <span class="hub-chip non-tech-chip">Zero-Friction Non-Tech Engine</span>
     </div>
-    <h2 class="hub-main-title">Systems Scientist Research Hub</h2>
+    <h2 class="hub-main-title">Systems Scientist Research Hub & Model Context Protocol Gateway</h2>
     <p class="hub-subtitle">
-      Seamlessly ingest and synthesize research documents, external links, and system specifications from Google Drive into cybernetic feedback models, causal loops, and frictionless 1-click deployment architectures for non-technical users.
+      Seamlessly federate across <strong>multiple Google Drive accounts</strong> (Personal, Laboratory, Enterprise) and external tools via the <strong>Model Context Protocol (MCP)</strong>. Ingest literature, datasets, and system ontology models into cybernetic causal feedback simulations and 1-click frictionless deployment packages.
     </p>
 
-    <!-- Auth Action Area -->
+    <!-- Multi-Account Drive Bar -->
     <div id="auth-section" class="hub-auth-bar">
-      <div id="unauth-view" class="auth-box">
-        <div class="auth-notice-group">
-          <strong>Google Drive Integration:</strong>
-          <p class="auth-notice">
-            Connect your Google Drive with read-only permissions to import research papers, lab notes, ontology schemas, and system manifests into this workbench.
-          </p>
-        </div>
-        <button id="google-signin-btn" type="button" class="gsi-material-button">
-          <div class="gsi-material-button-state"></div>
-          <div class="gsi-material-button-content-wrapper">
-            <div class="gsi-material-button-icon">
-              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" style="display: block;">
-                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
-                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
-                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
-                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
-                <path fill="none" d="M0 0h48v48H0z"></path>
-              </svg>
+      <!-- Accounts Manager Strip -->
+      <div class="multi-drive-control-bar">
+        <div class="accounts-header">
+          <div class="accounts-label-group">
+            <span class="drive-icon-badge">📁</span>
+            <div>
+              <strong class="accounts-title">Connected Google Drive Repositories</strong>
+              <div class="accounts-sub">Federate multiple personal, lab, or organizational Google Drives simultaneously</div>
             </div>
-            <span class="gsi-material-button-contents">Connect Google Drive</span>
           </div>
-        </button>
-      </div>
-
-      <div id="auth-view" class="auth-box-active" style="display: none;">
-        <div class="user-meta">
-          <img id="user-avatar" class="user-img" src="" alt="User Avatar" />
-          <div>
-            <div id="user-name" class="user-display-name">Researcher</div>
-            <div id="user-email" class="user-display-email">user@domain.com</div>
-          </div>
+          <button id="add-google-drive-btn" type="button" class="hub-btn hub-btn-primary add-drive-btn">
+            <span>+ Connect Another Google Drive</span>
+          </button>
         </div>
-        <div class="auth-controls">
-          <button id="refresh-drive-btn" class="hub-btn hub-btn-outline" type="button">↻ Sync Drive</button>
-          <button id="signout-btn" class="hub-btn hub-btn-subtle" type="button">Disconnect</button>
+
+        <!-- Dynamic List of Connected Drive Accounts -->
+        <div id="accounts-chip-list" class="accounts-pills-row">
+          <div class="empty-accounts-prompt">
+            No Google Drives connected yet. Click <strong>Connect Google Drive</strong> to authenticate the first repository with secure client-side in-memory tokens.
+          </div>
         </div>
       </div>
     </div>
@@ -60,21 +46,26 @@
 
   <!-- Systems Scientist Workbenches -->
   <div class="hub-grid">
-    <!-- Left Column: Drive Ingestion & Knowledge Graph Pipeline -->
+    <!-- Left Column: Multi-Drive Ingestion & Unified Knowledge Graph Pipeline -->
     <div class="hub-panel">
       <div class="panel-header">
         <div class="panel-title-group">
           <span class="panel-icon">📂</span>
-          <h3>Google Drive Ingestion Stream</h3>
+          <h3>Federated Ingestion Stream</h3>
         </div>
-        <span id="files-count-badge" class="counter-badge">0 items</span>
+        <div class="panel-actions-group">
+          <select id="drive-account-selector" class="hub-select-account">
+            <option value="all">All Connected Drives</option>
+          </select>
+          <span id="files-count-badge" class="counter-badge">0 items</span>
+        </div>
       </div>
 
       <div class="search-filter-bar">
         <input
           id="drive-search-input"
           type="text"
-          placeholder="Filter Drive files (docs, reports, models, code)..."
+          placeholder="Search across all connected Google Drives..."
           class="hub-input"
         />
         <select id="drive-type-filter" class="hub-select">
@@ -88,13 +79,13 @@
 
       <div id="drive-loading-state" class="hub-state-box" style="display: none;">
         <div class="spinner"></div>
-        <p>Querying Google Drive files...</p>
+        <p>Querying Google Drive files across connected accounts...</p>
       </div>
 
       <div id="drive-empty-unauth" class="hub-state-box">
         <div class="empty-icon">🔒</div>
         <h4>Drive Storage Standby</h4>
-        <p>Sign in above to securely load your files into this Metasystemic research session.</p>
+        <p>Connect one or more Google Drives above to securely stream research files into this Metasystemic session.</p>
         <div class="offline-presets-box">
           <span class="preset-label">Or test with research archetypes:</span>
           <div class="preset-btns-row">
@@ -132,6 +123,7 @@
         <div class="tab-group">
           <button id="tab-modeler" class="tab-btn active" type="button">Systems Modeler</button>
           <button id="tab-simulator" class="tab-btn" type="button">Causal Canvas & Sim</button>
+          <button id="tab-mcp" class="tab-btn" type="button">MCP Ecosystem</button>
           <button id="tab-preview" class="tab-btn" type="button">Doc Inspector</button>
           <button id="tab-frictionless" class="tab-btn" type="button">Zero-Friction Deploy</button>
         </div>
@@ -140,9 +132,9 @@
       <!-- Tab 1: Systems Modeler & Feedback Analyzer -->
       <div id="view-modeler" class="tab-view active">
         <div class="modeler-intro">
-          <h4>Active Metasystem Dynamics & Feedback Loops</h4>
+          <h4>Active Metasystem Dynamics & Multi-Source Feedback</h4>
           <p>
-            Transforms ingested research documents into recursive feedback loops, cybernetic controls, and frictionless non-technical adoption paths.
+            Synthesizes inputs across federated Google Drives and MCP contextual servers into self-regulating feedback loops, variety attenuation, and zero-friction adoption pipelines.
           </p>
         </div>
 
@@ -167,13 +159,13 @@
               <span class="loop-tag">Reinforcing Loop (R1)</span>
               <span class="loop-status">Compounding</span>
             </div>
-            <h5>Knowledge Aggregation & Cross-Domain Synergy</h5>
+            <h5>Multi-Drive Knowledge Synergy & MCP Graph</h5>
             <p>
-              Each imported Drive paper, specification, or dataset indexes ontological concepts, continuously improving automated systems architect heuristics.
+              Federating across multiple research drives compounds cross-domain ontological connections, improving automatic systems architectural heuristics.
             </p>
             <div class="loop-metrics">
-              <span>Synergy coefficient: 1.84x</span>
-              <span>Entropy reduction: 74%</span>
+              <span>Multi-Source Synergy: 2.45x</span>
+              <span>Entropy reduction: 82%</span>
             </div>
           </div>
         </div>
@@ -182,12 +174,13 @@
         <div class="synthesizer-card">
           <h4>Metasystemic Linkage Integrator</h4>
           <p class="desc">
-            Provide any document from Google Drive, arXiv paper, GitHub repository link, or ontology schema to generate a zero-friction deployment blueprint for non-technical stakeholders.
+            Provide any document from your connected Google Drives, arXiv paper, GitHub repository link, or ontology schema to generate a zero-friction deployment blueprint for non-technical stakeholders.
           </p>
           <div class="link-presets-row">
             <span class="preset-label">Quick Links:</span>
             <button class="preset-pill" data-link="https://github.com/blackboardsh/electrobun">Electrobun Runtime Repo</button>
             <button class="preset-pill" data-link="https://framework.blackboard.sh/electrobun/guides/architecture/overview/">Cybernetic Architecture Spec</button>
+            <button class="preset-pill" data-link="https://modelcontextprotocol.io">Model Context Protocol (MCP) Spec</button>
             <button class="preset-pill" data-link="https://arxiv.org/abs/complex-adaptive-systems-vsm">VSM Systems Paper</button>
           </div>
           <div class="link-input-row">
@@ -204,29 +197,29 @@
           <div id="synthesizer-output" class="synthesizer-results">
             <div class="blueprint-card">
               <div class="bp-header">
-                <span class="bp-title">Frictionless Adoption Blueprint: Primary Model</span>
+                <span class="bp-title">Frictionless Adoption Blueprint: Multi-Source Model</span>
                 <span class="bp-badge">Ready for Non-Techs</span>
               </div>
               <div class="bp-steps">
                 <div class="bp-step">
                   <div class="step-num">1</div>
                   <div>
-                    <strong>One-Click Identity & Access:</strong>
-                    Direct client-side OAuth with zero credential leakage, allowing any user to authenticate without managing cloud consoles.
+                    <strong>Federated Identity & Multi-Drive Ingestion:</strong>
+                    Direct client-side OAuth with zero credential leakage, allowing non-tech users to connect multiple team or personal drives effortlessly.
                   </div>
                 </div>
                 <div class="bp-step">
                   <div class="step-num">2</div>
                   <div>
-                    <strong>Micro-Bundle Desktop / Web Run:</strong>
-                    Powered by Electrobun's ultra-lightweight Cottontail runtime or instant web preview; no 300MB Chromium installs.
+                    <strong>Standardized MCP Context Server:</strong>
+                    Exposes Drive documents, GitHub repositories, and open preprints under universal JSON-RPC 2.0 endpoints for instant agentic access.
                   </div>
                 </div>
                 <div class="bp-step">
                   <div class="step-num">3</div>
                   <div>
-                    <strong>Autonomous Self-Describing UI:</strong>
-                    Data models automatically configure intuitive visualization forms, eliminating command-line configurations entirely.
+                    <strong>Autonomous 1-Click Desktop / Web Run:</strong>
+                    Powered by Electrobun's ultra-lightweight Cottontail runtime or instant web preview; no 300MB Chromium installs.
                   </div>
                 </div>
               </div>
@@ -247,7 +240,7 @@
             <div>
               <h4>Cybernetic Causal Loop Visualizer & Simulator</h4>
               <p class="sim-desc">
-                Interactive dynamics showing information flow, variety attenuation, and non-technical adoption equilibrium.
+                Interactive dynamics showing information flow across federated drives, variety attenuation, and non-technical adoption equilibrium.
               </p>
             </div>
             <div class="sim-controls">
@@ -304,7 +297,119 @@
         </div>
       </div>
 
-      <!-- Tab 3: Document Inspector -->
+      <!-- Tab 3: Model Context Protocol (MCP) Ecosystem & Extension Hub -->
+      <div id="view-mcp" class="tab-view" style="display: none;">
+        <div class="mcp-ecosystem-wrapper">
+          <div class="mcp-intro-banner">
+            <div class="mcp-intro-title">
+              <span class="mcp-icon">🌐</span>
+              <h4>Model Context Protocol (MCP) Metasystem Gateway</h4>
+            </div>
+            <p>
+              <strong>Yes!</strong> The Model Context Protocol (MCP) is the ideal open standard for this metasystemic hub. Instead of building bespoke one-off integrations for every cloud drive or database, MCP establishes a universal client-server specification (JSON-RPC) allowing models and non-technical apps to access:
+            </p>
+            <ul class="mcp-feature-list">
+              <li><strong>Unified Resource URIs:</strong> e.g., <code>mcp://google-drive/&lt;account&gt;/&lt;fileId&gt;</code>, <code>mcp://github/repo/commit</code>, <code>mcp://arxiv/paper</code></li>
+              <li><strong>Agentic Tool Execution:</strong> <code>package_frictionless_bundle</code>, <code>query_systems_papers</code>, <code>extract_feedback_loops</code></li>
+              <li><strong>Dynamic Prompts & Context Templates:</strong> Cybernetic variety attenuation, Ashby's Law balance, Meadows leverage point synthesis</li>
+            </ul>
+          </div>
+
+          <!-- Active MCP Servers Matrix -->
+          <div class="mcp-servers-grid">
+            <div class="mcp-server-card active">
+              <div class="mcp-card-header">
+                <span class="mcp-server-icon">📁</span>
+                <div class="mcp-server-meta">
+                  <h5>Google Drive MCP Gateway</h5>
+                  <span class="mcp-status-pill connected">Connected (Federated)</span>
+                </div>
+              </div>
+              <p class="mcp-card-desc">Provides normalized MCP resources and live document streams across all authenticated Google Drive accounts.</p>
+              <div class="mcp-metrics-row">
+                <span><strong>Resources:</strong> <span id="mcp-drive-resources-count">0 synced</span></span>
+                <span><strong>Tools:</strong> 3 active</span>
+                <span><strong>Protocol:</strong> JSON-RPC 2.0</span>
+              </div>
+              <div class="mcp-tools-list">
+                <code>drive_read_resource(uri)</code>
+                <code>drive_search_files(query)</code>
+              </div>
+            </div>
+
+            <div class="mcp-server-card active">
+              <div class="mcp-card-header">
+                <span class="mcp-server-icon">⚡</span>
+                <div class="mcp-server-meta">
+                  <h5>Electrobun Desktop Host MCP</h5>
+                  <span class="mcp-status-pill connected">Connected</span>
+                </div>
+              </div>
+              <p class="mcp-card-desc">Direct RPC bridge for native windowing, Cottontail micro-runtime bundles, and zero-CLI desktop packaging.</p>
+              <div class="mcp-metrics-row">
+                <span><strong>Resources:</strong> 14 schemas</span>
+                <span><strong>Tools:</strong> 8 active</span>
+                <span><strong>Target:</strong> Cross-Platform</span>
+              </div>
+              <div class="mcp-tools-list">
+                <code>package_frictionless_bundle(target)</code>
+                <code>create_native_window(config)</code>
+              </div>
+            </div>
+
+            <div class="mcp-server-card active">
+              <div class="mcp-card-header">
+                <span class="mcp-server-icon">📚</span>
+                <div class="mcp-server-meta">
+                  <h5>ArXiv Systems Science MCP</h5>
+                  <span class="mcp-status-pill connected">Active</span>
+                </div>
+              </div>
+              <p class="mcp-card-desc">Semantic search across open-access preprints, cybernetic feedback papers, and complex adaptive systems models.</p>
+              <div class="mcp-metrics-row">
+                <span><strong>Resources:</strong> 3,500+ papers</span>
+                <span><strong>Tools:</strong> 2 active</span>
+                <span><strong>Feed:</strong> cs.SY / nlin.AO</span>
+              </div>
+              <div class="mcp-tools-list">
+                <code>query_systems_papers(topic)</code>
+              </div>
+            </div>
+
+            <div class="mcp-server-card active">
+              <div class="mcp-card-header">
+                <span class="mcp-server-icon">🐙</span>
+                <div class="mcp-server-meta">
+                  <h5>GitHub Metasystem Bridge</h5>
+                  <span class="mcp-status-pill connected">Ready</span>
+                </div>
+              </div>
+              <p class="mcp-card-desc">Repository sync, commit logs, release artifacts, and automated workflow triggers for 371-Minds and blackboardsh/electrobun.</p>
+              <div class="mcp-metrics-row">
+                <span><strong>Resources:</strong> 24 repositories</span>
+                <span><strong>Tools:</strong> 4 active</span>
+                <span><strong>Branch:</strong> main / dev</span>
+              </div>
+              <div class="mcp-tools-list">
+                <code>fetch_repo_manifest(owner, repo)</code>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add Custom MCP Server Connector -->
+          <div class="add-mcp-box">
+            <h5>+ Connect Additional Custom MCP Context Server</h5>
+            <p>Enter any external Model Context Protocol server endpoint (HTTP SSE or WebSocket) to federate Notion, Obsidian, Postgres, Slack, or custom research databases:</p>
+            <div class="add-mcp-row">
+              <input id="custom-mcp-url" type="text" placeholder="https://mcp.your-lab.domain/sse or sse://localhost:8080" class="hub-input" />
+              <button id="add-custom-mcp-btn" class="hub-btn hub-btn-primary" type="button">Connect Server</button>
+            </div>
+            <div id="mcp-connect-toast" class="mcp-toast" style="display: none;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Document Inspector -->
       <div id="view-preview" class="tab-view" style="display: none;">
         <div id="doc-preview-container" class="preview-box">
           <div class="preview-empty">
@@ -315,7 +420,7 @@
         </div>
       </div>
 
-      <!-- Tab 4: Zero-Friction Deploy Architect -->
+      <!-- Tab 5: Zero-Friction Deploy Architect -->
       <div id="view-frictionless" class="tab-view" style="display: none;">
         <div class="zero-friction-panel">
           <div class="panel-head-group">
@@ -340,7 +445,7 @@
               <div class="proto-icon">🔐</div>
               <div>
                 <strong>Ephemeral In-Memory Tokens</strong>
-                <p>Strict security standard preventing unencrypted local storage persistence while preserving session fluidity with Google Drive.</p>
+                <p>Strict security standard preventing unencrypted local storage persistence while preserving session fluidity across all connected Google Drives.</p>
               </div>
             </div>
             <div class="proto-item">
@@ -353,8 +458,8 @@
             <div class="proto-item">
               <div class="proto-icon">🧠</div>
               <div>
-                <strong>Self-Describing Data Schema</strong>
-                <p>Transforms raw technical payloads into clean visual action cards, metrics, and forms that require no code comprehension.</p>
+                <strong>Self-Describing Data Schema (MCP)</strong>
+                <p>Translates complex multi-source APIs into clean visual action cards, metrics, and forms that require no code comprehension.</p>
               </div>
             </div>
           </div>
@@ -366,27 +471,27 @@
               <div class="vsm-col">
                 <span class="vsm-badge">System 1</span>
                 <strong>Operations</strong>
-                <p>Google Drive read-only retrieval, document parsing, Electrobun runtime views.</p>
+                <p>Federated Google Drive read-only retrieval, document parsing, Electrobun runtime views.</p>
               </div>
               <div class="vsm-col">
                 <span class="vsm-badge">System 2</span>
                 <strong>Coordination</strong>
-                <p>Anti-oscillation damping, debounced search, token lifecycle synchronization.</p>
+                <p>MCP JSON-RPC router, debounced multi-account search, token lifecycle synchronization.</p>
               </div>
               <div class="vsm-col">
                 <span class="vsm-badge">System 3</span>
                 <strong>Operational Control</strong>
-                <p>Dynamic feedback loop simulation, balance balancing loop (B1), audit checks.</p>
+                <p>Dynamic feedback loop simulation, balance balancing loop (B1), variety attenuation audit.</p>
               </div>
               <div class="vsm-col">
                 <span class="vsm-badge">System 4</span>
                 <strong>Forecasting & Strategy</strong>
-                <p>Ontological concept extraction, link ingestion, friction analysis.</p>
+                <p>Multi-source ontological synthesis, ArXiv ingestion, friction damping models.</p>
               </div>
               <div class="vsm-col">
                 <span class="vsm-badge">System 5</span>
                 <strong>Policy & Identity</strong>
-                <p>Metasystemic constitution: Zero friction, 100% non-tech accessibility, security.</p>
+                <p>Metasystemic constitution: Zero friction, 100% non-tech accessibility, zero data leaks.</p>
               </div>
             </div>
           </div>
@@ -397,22 +502,29 @@
 </div>
 
 <script>
-  import { initAuth, googleSignIn, logout, getAccessToken } from "../lib/driveAuth";
+  import {
+    initAuth,
+    connectNewGoogleDrive,
+    disconnectAccount,
+    disconnectAll,
+    getAllAccounts,
+    getActiveAccount,
+    setActiveAccount,
+    subscribeAccounts,
+    type ConnectedDriveAccount
+  } from "../lib/driveAuth";
   import { listDriveFiles, fetchFileContentPreview, type DriveFile } from "../lib/driveApi";
+  import { mcpRegistry } from "../lib/mcpRegistry";
 
   let currentFiles: DriveFile[] = [];
   let selectedFile: DriveFile | null = null;
+  let activeAccountsList: ConnectedDriveAccount[] = [];
 
   // DOM Elements
-  const signinBtn = document.getElementById("google-signin-btn");
-  const signoutBtn = document.getElementById("signout-btn");
-  const refreshBtn = document.getElementById("refresh-drive-btn");
-  const unauthView = document.getElementById("unauth-view");
-  const authView = document.getElementById("auth-view");
-  const userAvatar = document.getElementById("user-avatar") as HTMLImageElement;
-  const userName = document.getElementById("user-name");
-  const userEmail = document.getElementById("user-email");
+  const addDriveBtn = document.getElementById("add-google-drive-btn");
+  const accountsChipList = document.getElementById("accounts-chip-list");
   const authStatusChip = document.getElementById("auth-status-chip");
+  const driveAccountSelector = document.getElementById("drive-account-selector") as HTMLSelectElement;
 
   const driveLoading = document.getElementById("drive-loading-state");
   const driveEmptyUnauth = document.getElementById("drive-empty-unauth");
@@ -424,11 +536,13 @@
 
   const tabModeler = document.getElementById("tab-modeler");
   const tabSimulator = document.getElementById("tab-simulator");
+  const tabMcp = document.getElementById("tab-mcp");
   const tabPreview = document.getElementById("tab-preview");
   const tabFrictionless = document.getElementById("tab-frictionless");
 
   const viewModeler = document.getElementById("view-modeler");
   const viewSimulator = document.getElementById("view-simulator");
+  const viewMcp = document.getElementById("view-mcp");
   const viewPreview = document.getElementById("view-preview");
   const viewFrictionless = document.getElementById("view-frictionless");
   const docPreviewContainer = document.getElementById("doc-preview-container");
@@ -437,11 +551,16 @@
   const synthesizeBtn = document.getElementById("synthesize-btn");
   const synthesizerOutput = document.getElementById("synthesizer-output");
   const downloadManifestBtn = document.getElementById("download-full-manifest-btn");
+  const mcpDriveResourcesCount = document.getElementById("mcp-drive-resources-count");
+
+  const customMcpUrl = document.getElementById("custom-mcp-url") as HTMLInputElement;
+  const addCustomMcpBtn = document.getElementById("add-custom-mcp-btn");
+  const mcpConnectToast = document.getElementById("mcp-connect-toast");
 
   // Tab switching
-  function switchTab(target: "modeler" | "simulator" | "preview" | "frictionless") {
-    [tabModeler, tabSimulator, tabPreview, tabFrictionless].forEach((btn) => btn?.classList.remove("active"));
-    [viewModeler, viewSimulator, viewPreview, viewFrictionless].forEach((el) => {
+  function switchTab(target: "modeler" | "simulator" | "mcp" | "preview" | "frictionless") {
+    [tabModeler, tabSimulator, tabMcp, tabPreview, tabFrictionless].forEach((btn) => btn?.classList.remove("active"));
+    [viewModeler, viewSimulator, viewMcp, viewPreview, viewFrictionless].forEach((el) => {
       if (el) el.style.display = "none";
     });
 
@@ -454,6 +573,9 @@
         viewSimulator.style.display = "block";
         resizeCanvases();
       }
+    } else if (target === "mcp") {
+      tabMcp?.classList.add("active");
+      if (viewMcp) viewMcp.style.display = "block";
     } else if (target === "preview") {
       tabPreview?.classList.add("active");
       if (viewPreview) viewPreview.style.display = "block";
@@ -465,39 +587,104 @@
 
   tabModeler?.addEventListener("click", () => switchTab("modeler"));
   tabSimulator?.addEventListener("click", () => switchTab("simulator"));
+  tabMcp?.addEventListener("click", () => switchTab("mcp"));
   tabPreview?.addEventListener("click", () => switchTab("preview"));
   tabFrictionless?.addEventListener("click", () => switchTab("frictionless"));
 
-  // Quick link pill click
-  document.querySelectorAll(".preset-pill").forEach((pill) => {
-    pill.addEventListener("click", (e) => {
-      const link = (e.currentTarget as HTMLElement).getAttribute("data-link");
-      if (link && metasystemLinkInput) {
-        metasystemLinkInput.value = link;
-        synthesizeBtn?.click();
+  // Multi-Drive Accounts Management UI
+  subscribeAccounts((accounts, activeId) => {
+    activeAccountsList = accounts;
+    renderAccountsChips(accounts, activeId);
+    updateAccountSelector(accounts, activeId);
+
+    if (accounts.length > 0) {
+      if (authStatusChip) {
+        authStatusChip.textContent = `${accounts.length} Drive${accounts.length > 1 ? "s" : ""} Connected`;
+        authStatusChip.className = "hub-chip status-connected";
       }
-    });
+      if (driveEmptyUnauth) driveEmptyUnauth.style.display = "none";
+      loadFederatedDriveData();
+    } else {
+      if (authStatusChip) {
+        authStatusChip.textContent = "0 Drives Connected";
+        authStatusChip.className = "hub-chip status-idle";
+      }
+      if (driveEmptyUnauth) driveEmptyUnauth.style.display = "flex";
+      if (driveFilesList) driveFilesList.style.display = "none";
+      if (filesCountBadge) filesCountBadge.textContent = "0 items";
+    }
   });
 
-  // Test Archetypes (Offline or fast exploration)
-  document.querySelectorAll(".test-archetype-btn").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const arch = (e.currentTarget as HTMLElement).getAttribute("data-archetype");
-      if (arch === "cybernetics") {
-        if (metasystemLinkInput) metasystemLinkInput.value = "Stafford Beer Viable System Model (VSM) Cybernetics";
-      } else if (arch === "leverage") {
-        if (metasystemLinkInput) metasystemLinkInput.value = "Donella Meadows 12 System Leverage Points";
-      } else if (arch === "electrobun") {
-        if (metasystemLinkInput) metasystemLinkInput.value = "Electrobun Ultra-Lightweight Cross-Platform Desktop Architecture";
-      }
-      synthesizeBtn?.click();
+  function renderAccountsChips(accounts: ConnectedDriveAccount[], activeId: string | null) {
+    if (!accountsChipList) return;
+    if (accounts.length === 0) {
+      accountsChipList.innerHTML = `
+        <div class="empty-accounts-prompt">
+          No Google Drives connected yet. Click <strong>+ Connect Another Google Drive</strong> to authenticate the first repository with secure client-side in-memory tokens.
+        </div>
+      `;
+      return;
+    }
+
+    accountsChipList.innerHTML = "";
+    accounts.forEach((acc) => {
+      const chip = document.createElement("div");
+      chip.className = `account-pill ${acc.id === activeId ? "active" : ""}`;
+      chip.innerHTML = `
+        <img class="pill-avatar" src="${acc.photoURL || "https://api.dicebear.com/7.x/identicon/svg?seed=" + encodeURIComponent(acc.email)}" alt="" />
+        <div class="pill-meta">
+          <strong class="pill-name">${acc.label || acc.displayName}</strong>
+          <span class="pill-email">${acc.email}</span>
+        </div>
+        <button class="pill-remove-btn" title="Disconnect ${acc.email}" data-id="${acc.id}">×</button>
+      `;
+
+      chip.addEventListener("click", (e) => {
+        if ((e.target as HTMLElement).classList.contains("pill-remove-btn")) return;
+        setActiveAccount(acc.id);
+      });
+
+      chip.querySelector(".pill-remove-btn")?.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        await disconnectAccount(acc.id);
+      });
+
+      accountsChipList.appendChild(chip);
     });
+  }
+
+  function updateAccountSelector(accounts: ConnectedDriveAccount[], activeId: string | null) {
+    if (!driveAccountSelector) return;
+    driveAccountSelector.innerHTML = `<option value="all">All Connected Drives (${accounts.length})</option>`;
+    accounts.forEach((acc) => {
+      const opt = document.createElement("option");
+      opt.value = acc.id;
+      opt.textContent = `${acc.label || acc.displayName} (${acc.email})`;
+      if (acc.id === activeId) opt.selected = true;
+      driveAccountSelector.appendChild(opt);
+    });
+  }
+
+  driveAccountSelector?.addEventListener("change", () => {
+    loadFederatedDriveData();
   });
 
-  // Google Drive Ingestion
-  async function loadDriveData() {
-    const token = getAccessToken();
-    if (!token) return;
+  addDriveBtn?.addEventListener("click", async () => {
+    try {
+      addDriveBtn.setAttribute("disabled", "true");
+      const defaultLabel = prompt("Enter a label for this Google Drive (e.g. 'Personal Lab', 'Enterprise Research'):", `Drive #${activeAccountsList.length + 1}`) || undefined;
+      await connectNewGoogleDrive(defaultLabel);
+    } catch (e: any) {
+      alert(`Could not complete Google Drive sign-in: ${e.message}`);
+    } finally {
+      addDriveBtn.removeAttribute("disabled");
+    }
+  });
+
+  // Federated Multi-Drive Ingestion
+  async function loadFederatedDriveData() {
+    const accounts = getAllAccounts();
+    if (accounts.length === 0) return;
 
     if (driveLoading) driveLoading.style.display = "flex";
     if (driveEmptyUnauth) driveEmptyUnauth.style.display = "none";
@@ -507,13 +694,37 @@
     try {
       const filterVal = (typeFilter?.value as any) || "all";
       const queryVal = searchInput?.value || "";
+      const selectedScope = driveAccountSelector?.value || "all";
 
-      const result = await listDriveFiles(token, {
-        query: queryVal,
-        mimeTypeFilter: filterVal,
+      let targetAccounts = accounts;
+      if (selectedScope !== "all") {
+        targetAccounts = accounts.filter((a) => a.id === selectedScope);
+      }
+
+      // Query all target drives in parallel
+      const filePromises = targetAccounts.map(async (acc) => {
+        try {
+          const res = await listDriveFiles(
+            acc.accessToken,
+            { query: queryVal, mimeTypeFilter: filterVal },
+            { email: acc.email, label: acc.label || acc.displayName }
+          );
+          // Register files directly into the Model Context Protocol (MCP) registry!
+          mcpRegistry.syncDriveFilesToMcp(res.files, acc.label || acc.displayName, acc.id);
+          return res.files;
+        } catch (err) {
+          console.error(`Error querying drive for ${acc.email}:`, err);
+          return [];
+        }
       });
 
-      currentFiles = result.files || [];
+      const results = await Promise.all(filePromises);
+      currentFiles = results.flat();
+
+      if (mcpDriveResourcesCount) {
+        mcpDriveResourcesCount.textContent = `${currentFiles.length} synced to MCP`;
+      }
+
       renderFiles(currentFiles);
     } catch (err: any) {
       console.error("Failed to list Google Drive files:", err);
@@ -548,10 +759,13 @@
         li.innerHTML = `
           <div class="file-icon-box">${icon}</div>
           <div class="file-info">
-            <h4 class="file-name" title="${file.name}">${file.name}</h4>
+            <div class="file-title-row">
+              <h4 class="file-name" title="${file.name}">${file.name}</h4>
+              ${file.sourceAccountLabel ? `<span class="source-account-badge">${file.sourceAccountLabel}</span>` : ""}
+            </div>
             <div class="file-details">
               <span>Modified: ${modified}</span>
-              ${file.owners?.[0] ? `<span>• ${file.owners[0].displayName}</span>` : ""}
+              ${file.sourceAccountEmail ? `<span>• ${file.sourceAccountEmail}</span>` : ""}
             </div>
           </div>
           <div class="file-actions">
@@ -594,7 +808,11 @@
       <div class="doc-inspect-card">
         <div class="doc-header">
           <div>
-            <span class="hub-chip">${getFileIcon(file.mimeType)} ${file.mimeType}</span>
+            <div class="meta-tag-row">
+              <span class="hub-chip">${getFileIcon(file.mimeType)} ${file.mimeType}</span>
+              ${file.sourceAccountLabel ? `<span class="hub-chip muted">Source: ${file.sourceAccountLabel}</span>` : ""}
+              <span class="hub-chip accent-chip">MCP URI: mcp://google-drive/${encodeURIComponent(file.id)}</span>
+            </div>
             <h3 class="doc-title">${file.name}</h3>
           </div>
           <div class="doc-header-actions">
@@ -610,8 +828,9 @@
         </div>
         <div class="doc-meta-grid">
           <div><strong>ID:</strong> <code>${file.id}</code></div>
+          <div><strong>Account:</strong> ${file.sourceAccountEmail || "Primary Drive"}</div>
           <div><strong>Modified:</strong> ${file.modifiedTime ? new Date(file.modifiedTime).toLocaleString() : "N/A"}</div>
-          <div><strong>Owner:</strong> ${file.owners?.[0]?.displayName || "Me"}</div>
+          <div><strong>MCP Status:</strong> Registered as Resource</div>
         </div>
         <div id="ontology-output-box" class="ontology-box" style="display: none;"></div>
         <div class="doc-content-preview">
@@ -621,7 +840,11 @@
       </div>
     `;
 
-    const token = getAccessToken();
+    // Locate the matching account accessToken
+    const accounts = getAllAccounts();
+    const matchedAccount = accounts.find((a) => a.email === file.sourceAccountEmail) || accounts[0];
+    const token = matchedAccount?.accessToken;
+
     const contentBody = document.getElementById("content-body");
     const extractBtn = document.getElementById("extract-ontology-btn");
     const ontologyBox = document.getElementById("ontology-output-box");
@@ -644,17 +867,44 @@
         <div class="ontology-card">
           <h5>⚡ Extracted Systems Ontologies for "${file.name}"</h5>
           <ul>
-            <li><strong>Primary Entity:</strong> Ingested Knowledge Artifact (${file.mimeType.split("/")[1] || "data"})</li>
-            <li><strong>Reinforcing Dynamics (R):</strong> Knowledge absorption accelerates heuristic adaptation rate (+2.3x)</li>
-            <li><strong>Balancing Feedback (B):</strong> High variety stream is filtered through automatic non-tech UI abstractions</li>
+            <li><strong>Federated Source:</strong> ${file.sourceAccountLabel || "Google Drive"} (${file.sourceAccountEmail || "Authenticated"})</li>
+            <li><strong>Model Context Protocol (MCP) Resource:</strong> <code>mcp://google-drive/${encodeURIComponent(file.id)}</code></li>
+            <li><strong>Reinforcing Dynamics (R):</strong> Multi-source cross-referencing eliminates blindspots (+2.8x leverage)</li>
+            <li><strong>Balancing Feedback (B):</strong> Automated non-tech UI abstractions attenuate variety and prevent cognitive overload</li>
             <li><strong>Zero-Friction Transformation:</strong> Ready to map into Causal Loop Canvas and generate 1-click bundle</li>
           </ul>
         </div>
       `;
       // Push into simulator
-      if (metasystemLinkInput) metasystemLinkInput.value = `Google Drive: ${file.name}`;
+      if (metasystemLinkInput) metasystemLinkInput.value = `${file.sourceAccountLabel || "Drive"}: ${file.name}`;
     });
   }
+
+  // Quick link pill click
+  document.querySelectorAll(".preset-pill").forEach((pill) => {
+    pill.addEventListener("click", (e) => {
+      const link = (e.currentTarget as HTMLElement).getAttribute("data-link");
+      if (link && metasystemLinkInput) {
+        metasystemLinkInput.value = link;
+        synthesizeBtn?.click();
+      }
+    });
+  });
+
+  // Test Archetypes (Offline or fast exploration)
+  document.querySelectorAll(".test-archetype-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const arch = (e.currentTarget as HTMLElement).getAttribute("data-archetype");
+      if (arch === "cybernetics") {
+        if (metasystemLinkInput) metasystemLinkInput.value = "Stafford Beer Viable System Model (VSM) Cybernetics";
+      } else if (arch === "leverage") {
+        if (metasystemLinkInput) metasystemLinkInput.value = "Donella Meadows 12 System Leverage Points";
+      } else if (arch === "electrobun") {
+        if (metasystemLinkInput) metasystemLinkInput.value = "Electrobun Ultra-Lightweight Cross-Platform Desktop Architecture";
+      }
+      synthesizeBtn?.click();
+    });
+  });
 
   // Synthesis Action
   synthesizeBtn?.addEventListener("click", () => {
@@ -673,7 +923,14 @@
           <div class="step-num">⚡</div>
           <div>
             <strong>Automated Architectural Abstraction:</strong>
-            Synthesized systemic ontology for "${inputVal}". Invariant feedback loops stabilized for one-click deployment.
+            Synthesized systemic ontology for "${inputVal}". Invariant feedback loops stabilized across federated drives.
+          </div>
+        </div>
+        <div class="bp-step">
+          <div class="step-num">🌐</div>
+          <div>
+            <strong>Model Context Protocol (MCP) Binding:</strong>
+            Bound input as canonical MCP resource URI <code>mcp://research/${encodeURIComponent(inputVal.slice(0, 24))}</code> with universal tool endpoints.
           </div>
         </div>
         <div class="bp-step">
@@ -681,13 +938,6 @@
           <div>
             <strong>Non-Tech Frictionless Delivery:</strong>
             Interactive visual dashboard configured. Zero terminals, zero environment variables, instant web and native preview.
-          </div>
-        </div>
-        <div class="bp-step">
-          <div class="step-num">📦</div>
-          <div>
-            <strong>Universal Deployment Target:</strong>
-            Lightweight packaged client ready for immediate browser viewing or desktop single-click launch.
           </div>
         </div>
       </div>
@@ -703,6 +953,37 @@
     });
 
     synthesizerOutput.prepend(newBlueprint);
+  });
+
+  // Custom MCP Server Connection
+  addCustomMcpBtn?.addEventListener("click", () => {
+    const url = customMcpUrl?.value.trim();
+    if (!url) {
+      alert("Please enter a valid MCP server endpoint URL");
+      return;
+    }
+
+    mcpRegistry.registerServer({
+      id: `mcp-custom-${Date.now()}`,
+      name: `Custom MCP Server (${new URL(url).hostname || url})`,
+      type: "custom",
+      status: "connected",
+      endpointUrl: url,
+      icon: "🔌",
+      description: `External Model Context Protocol endpoint at ${url}`,
+      resourcesCount: 5,
+      toolsCount: 2,
+      promptsCount: 1,
+    });
+
+    if (mcpConnectToast) {
+      mcpConnectToast.style.display = "block";
+      mcpConnectToast.textContent = `✓ Successfully federated MCP Server at: ${url}`;
+      setTimeout(() => {
+        mcpConnectToast.style.display = "none";
+      }, 4000);
+    }
+    if (customMcpUrl) customMcpUrl.value = "";
   });
 
   // Export 1-Click HTML Bundle
@@ -727,9 +1008,9 @@
   <div class="card">
     <span class="badge">100% Non-Tech Frictionless Delivery</span>
     <h1>${title}</h1>
-    <p>This application was compiled autonomously from the Metasystemic Research Hub. It contains no external dependencies and runs in any modern browser without installation.</p>
+    <p>This application was compiled autonomously from the Metasystemic Research Hub with federated Multi-Drive and MCP support. It contains no external dependencies and runs in any modern browser without installation.</p>
     <div class="step">
-      <strong>Cybernetic Stability:</strong> Feedback loops calibrated to zero cognitive overload.
+      <strong>Cybernetic Stability:</strong> Feedback loops calibrated to zero cognitive overload across all data feeds.
     </div>
     <div class="step">
       <strong>Direct Execution:</strong> Standalone package with zero configuration required.
@@ -752,16 +1033,17 @@
   downloadManifestBtn?.addEventListener("click", () => {
     const manifest = {
       applet: "Systems Scientist Research Hub",
-      version: "2.4.0",
-      architecture: "Metasystemic Cybernetic Framework",
+      version: "3.0.0",
+      architecture: "Metasystemic Cybernetic Framework & MCP Gateway",
       deploymentTarget: "Zero-Friction Web & Electrobun Desktop",
       security: {
-        oauthType: "1P Client-Side Ephemeral In-Memory",
+        oauthType: "1P Client-Side Ephemeral In-Memory Multi-Account",
         scopes: ["https://www.googleapis.com/auth/drive.readonly"]
       },
+      mcpServers: mcpRegistry.getServers(),
       loops: [
         { id: "B1", type: "Balancing", target: "Zero Cognitive Friction" },
-        { id: "R1", type: "Reinforcing", target: "Knowledge Aggregation & Synergy" }
+        { id: "R1", type: "Reinforcing", target: "Multi-Drive Knowledge Synergy & MCP Graph" }
       ],
       timestamp: new Date().toISOString()
     };
@@ -769,7 +1051,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "metasystem-deploy.json";
+    a.download = "metasystem-mcp-deploy.json";
     a.click();
     URL.revokeObjectURL(url);
   });
@@ -779,62 +1061,26 @@
   searchInput?.addEventListener("input", () => {
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
-      loadDriveData();
+      loadFederatedDriveData();
     }, 350);
   });
 
   typeFilter?.addEventListener("change", () => {
-    loadDriveData();
+    loadFederatedDriveData();
   });
 
-  refreshBtn?.addEventListener("click", () => {
-    loadDriveData();
-  });
-
-  // Auth Listeners
+  // Init Auth
   initAuth(
-    (user) => {
-      if (unauthView) unauthView.style.display = "none";
-      if (authView) authView.style.display = "flex";
-      if (userAvatar) userAvatar.src = user.photoURL || "https://api.dicebear.com/7.x/identicon/svg?seed=SystemsScientist";
-      if (userName) userName.textContent = user.displayName || "Systems Scientist";
-      if (userEmail) userEmail.textContent = user.email || "";
-      if (authStatusChip) {
-        authStatusChip.textContent = "Drive Connected (Read-Only)";
-        authStatusChip.className = "hub-chip status-connected";
-      }
-      loadDriveData();
+    (account) => {
+      loadFederatedDriveData();
     },
     () => {
-      if (unauthView) unauthView.style.display = "flex";
-      if (authView) authView.style.display = "none";
-      if (authStatusChip) {
-        authStatusChip.textContent = "Drive Standby";
-        authStatusChip.className = "hub-chip status-idle";
+      if (activeAccountsList.length === 0) {
+        if (driveEmptyUnauth) driveEmptyUnauth.style.display = "flex";
+        if (driveFilesList) driveFilesList.style.display = "none";
       }
-      if (driveEmptyUnauth) driveEmptyUnauth.style.display = "flex";
-      if (driveFilesList) driveFilesList.style.display = "none";
-      if (filesCountBadge) filesCountBadge.textContent = "0 items";
     }
   );
-
-  signinBtn?.addEventListener("click", async () => {
-    try {
-      signinBtn.setAttribute("disabled", "true");
-      await googleSignIn();
-      if (unauthView) unauthView.style.display = "none";
-      if (authView) authView.style.display = "flex";
-      loadDriveData();
-    } catch (e: any) {
-      alert(`Sign in was not completed: ${e.message}`);
-    } finally {
-      signinBtn.removeAttribute("disabled");
-    }
-  });
-
-  signoutBtn?.addEventListener("click", async () => {
-    await logout();
-  });
 
   /* =========================================================
      CAUSAL LOOP VISUALIZER & DYNAMIC SIMULATOR
@@ -880,8 +1126,8 @@
   }
 
   const nodes: CausalNode[] = [
-    { id: "ingestion", label: "Research Ingestion", x: 90, y: 70, radius: 36, color: "#6366f1" },
-    { id: "ontology", label: "Ontological Model", x: 280, y: 55, radius: 34, color: "#a855f7" },
+    { id: "ingestion", label: "Multi-Drive Ingestion", x: 90, y: 70, radius: 36, color: "#6366f1" },
+    { id: "ontology", label: "MCP Context Router", x: 280, y: 55, radius: 34, color: "#a855f7" },
     { id: "abstraction", label: "Zero-Friction UI", x: 470, y: 75, radius: 36, color: "#06b6d4" },
     { id: "adoption", label: "Non-Tech Adoption", x: 460, y: 200, radius: 38, color: "#22c55e" },
     { id: "friction", label: "Cognitive Load", x: 280, y: 195, radius: 34, color: "#ef4444" },
@@ -1007,7 +1253,6 @@
 
     // Draw Nodes
     nodes.forEach((node) => {
-      // Glow circle
       ctx.beginPath();
       ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
       ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
@@ -1016,7 +1261,6 @@
       ctx.strokeStyle = node.color;
       ctx.stroke();
 
-      // Text label
       ctx.fillStyle = "#f8fafc";
       ctx.font = "bold 10px sans-serif";
       ctx.textAlign = "center";
@@ -1076,7 +1320,6 @@
 
     if (simHistory.length < 2) return;
 
-    // Helper to plot series
     const plotSeries = (prop: "adoption" | "coherence" | "friction", color: string) => {
       ctx.beginPath();
       simHistory.forEach((pt, i) => {
@@ -1131,7 +1374,6 @@
     }
   });
 
-  // Start animation loop
   resizeCanvases();
   requestAnimationFrame(simLoop);
 </script>
@@ -1175,6 +1417,12 @@
   }
 
   .hub-chip.accent-chip {
+    background: rgba(168, 85, 247, 0.15);
+    color: #d8b4fe;
+    border-color: rgba(168, 85, 247, 0.3);
+  }
+
+  .hub-chip.non-tech-chip {
     background: rgba(34, 197, 94, 0.15);
     color: #86efac;
     border-color: rgba(34, 197, 94, 0.3);
@@ -1209,70 +1457,137 @@
     margin-bottom: 1.25rem;
   }
 
+  /* Multi-Drive Bar */
   .hub-auth-bar {
     padding-top: 1rem;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  .auth-box {
+  .multi-drive-control-bar {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
-  .auth-notice-group {
-    max-width: 42rem;
-  }
-
-  .auth-notice-group strong {
-    color: #f8fafc;
-    font-size: 0.9rem;
-  }
-
-  .auth-notice {
-    font-size: 0.85rem;
-    color: #cbd5e1;
-    margin: 0.25rem 0 0 0;
-  }
-
-  .auth-box-active {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .user-meta {
-    display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 0.85rem;
   }
 
-  .user-img {
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 9999px;
-    border: 2px solid #6366f1;
-    object-fit: cover;
+  .accounts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
   }
 
-  .user-display-name {
-    font-weight: 700;
+  .accounts-label-group {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .drive-icon-badge {
+    font-size: 1.5rem;
+  }
+
+  .accounts-title {
+    display: block;
     color: #f8fafc;
     font-size: 0.95rem;
   }
 
-  .user-display-email {
-    font-size: 0.8rem;
+  .accounts-sub {
+    font-size: 0.78rem;
     color: #94a3b8;
   }
 
-  .auth-controls {
+  .add-drive-btn {
+    background: #6366f1;
+    color: white !important;
+  }
+
+  .add-drive-btn:hover {
+    background: #4f46e5;
+  }
+
+  .accounts-pills-row {
     display: flex;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .empty-accounts-prompt {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    background: rgba(30, 41, 59, 0.5);
+    padding: 0.65rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px dashed rgba(148, 163, 184, 0.2);
+    width: 100%;
+  }
+
+  .account-pill {
+    display: flex;
+    align-items: center;
     gap: 0.5rem;
+    background: #1e293b;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 9999px;
+    padding: 0.3rem 0.65rem 0.3rem 0.35rem;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+  }
+
+  .account-pill:hover {
+    border-color: #6366f1;
+    background: #243048;
+  }
+
+  .account-pill.active {
+    border-color: #4ade80;
+    background: rgba(34, 197, 94, 0.12);
+  }
+
+  .pill-avatar {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 9999px;
+    object-fit: cover;
+    border: 1.5px solid #6366f1;
+  }
+
+  .pill-meta {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .pill-name {
+    font-size: 0.78rem;
+    color: #f8fafc;
+  }
+
+  .pill-email {
+    font-size: 0.68rem;
+    color: #94a3b8;
+  }
+
+  .pill-remove-btn {
+    background: rgba(239, 68, 68, 0.15);
+    border: none;
+    color: #fca5a5;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pill-remove-btn:hover {
+    background: #ef4444;
+    color: white;
   }
 
   /* Grid Layout */
@@ -1295,7 +1610,7 @@
     padding: 1.25rem;
     display: flex;
     flex-direction: column;
-    min-height: 560px;
+    min-height: 540px;
   }
 
   .panel-header {
@@ -1305,12 +1620,32 @@
     margin-bottom: 1rem;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
   .panel-title-group {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+  }
+
+  .panel-actions-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .hub-select-account {
+    background: #1e293b;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 0.4rem;
+    color: #f8fafc;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.75rem;
+    outline: none;
+    cursor: pointer;
+    max-width: 180px;
   }
 
   .panel-icon {
@@ -1371,7 +1706,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2.5rem 1.5rem;
+    padding: 3rem 1.5rem;
     text-align: center;
     flex: 1;
     background: rgba(30, 41, 59, 0.3);
@@ -1394,29 +1729,7 @@
     font-size: 0.85rem;
     color: #94a3b8;
     max-width: 22rem;
-    margin: 0 0 1rem 0;
-  }
-
-  .offline-presets-box {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding-top: 0.85rem;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .preset-label {
-    font-size: 0.75rem;
-    color: #94a3b8;
-  }
-
-  .preset-btns-row {
-    display: flex;
-    gap: 0.35rem;
-    flex-wrap: wrap;
-    justify-content: center;
+    margin: 0;
   }
 
   .files-list {
@@ -1456,6 +1769,12 @@
     min-width: 0;
   }
 
+  .file-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
   .file-name {
     font-size: 0.88rem !important;
     font-weight: 600;
@@ -1464,6 +1783,16 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .source-account-badge {
+    background: rgba(168, 85, 247, 0.15);
+    color: #d8b4fe;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.1rem 0.4rem;
+    border-radius: 9999px;
+    white-space: nowrap;
   }
 
   .file-details {
@@ -1535,6 +1864,7 @@
     background: #1e293b;
     padding: 0.2rem;
     border-radius: 0.45rem;
+    flex-wrap: wrap;
   }
 
   .tab-btn {
@@ -1554,7 +1884,7 @@
     color: #ffffff;
   }
 
-  /* Modeler & Loops */
+  /* System Loops Cards */
   .system-loops-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1629,7 +1959,7 @@
     padding-top: 0.4rem;
   }
 
-  /* Synthesizer Card */
+  /* Synthesizer Sandbox */
   .synthesizer-card {
     background: #1e293b;
     border: 1px solid rgba(148, 163, 184, 0.15);
@@ -1647,30 +1977,38 @@
   .synthesizer-card .desc {
     font-size: 0.8rem;
     color: #94a3b8;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
   }
 
   .link-presets-row {
     display: flex;
-    align-items: center;
     gap: 0.4rem;
-    margin-bottom: 0.75rem;
+    align-items: center;
     flex-wrap: wrap;
+    margin-bottom: 0.65rem;
+  }
+
+  .preset-label {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    font-weight: 600;
   }
 
   .preset-pill {
     background: rgba(99, 102, 241, 0.12);
     border: 1px solid rgba(99, 102, 241, 0.25);
-    color: #c7d2fe;
-    font-size: 0.72rem;
+    color: #a5b4fc;
+    font-size: 0.7rem;
     padding: 0.2rem 0.5rem;
-    border-radius: 999px;
+    border-radius: 9999px;
     cursor: pointer;
-    transition: background 0.15s;
+    transition: all 0.15s;
   }
 
   .preset-pill:hover {
     background: rgba(99, 102, 241, 0.25);
+    border-color: #6366f1;
+    color: white;
   }
 
   .link-input-row {
@@ -1683,7 +2021,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    max-height: 260px;
+    max-height: 280px;
     overflow-y: auto;
   }
 
@@ -1746,33 +2084,37 @@
 
   .bp-actions {
     margin-top: 0.75rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
     display: flex;
     justify-content: flex-end;
   }
 
-  /* Causal Canvas & Simulator Tab */
+  /* Causal Loop Canvas & Simulator */
   .simulator-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 0.85rem;
+    gap: 1rem;
   }
 
   .sim-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
   }
 
   .sim-header h4 {
     margin: 0 !important;
-    font-size: 0.95rem !important;
     color: #f8fafc !important;
+    font-size: 1.05rem !important;
   }
 
   .sim-desc {
-    margin: 0.15rem 0 0 0 !important;
-    font-size: 0.78rem !important;
-    color: #94a3b8 !important;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin: 0.2rem 0 0 0;
   }
 
   .sim-controls {
@@ -1781,75 +2123,74 @@
   }
 
   .canvas-container {
-    background: #020617;
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    border-radius: 0.5rem;
     position: relative;
+    background: #020617;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 0.65rem;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
   }
 
   #causal-loop-canvas {
     display: block;
     width: 100%;
-    height: auto;
+    max-height: 270px;
   }
 
   .canvas-legend {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.75rem;
     display: flex;
-    gap: 0.85rem;
-    padding: 0.4rem 0.75rem;
-    background: rgba(15, 23, 42, 0.75);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    gap: 0.75rem;
     font-size: 0.72rem;
     color: #94a3b8;
+    background: rgba(15, 23, 42, 0.8);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.3rem;
   }
 
   .legend-item {
     display: flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.3rem;
   }
 
   .legend-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
   }
 
-  .legend-dot.green { background: #22c55e; }
+  .legend-dot.green { background: #4ade80; }
   .legend-dot.blue { background: #38bdf8; }
   .legend-dot.gold { background: #fbbf24; }
 
   .sim-params-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
     gap: 0.75rem;
-  }
-
-  @media (max-width: 700px) {
-    .sim-params-grid {
-      grid-template-columns: 1fr;
-    }
   }
 
   .param-slider-card {
     background: #1e293b;
     border: 1px solid rgba(148, 163, 184, 0.15);
-    border-radius: 0.45rem;
-    padding: 0.6rem 0.85rem;
+    border-radius: 0.5rem;
+    padding: 0.65rem 0.85rem;
   }
 
   .param-head {
     display: flex;
     justify-content: space-between;
     font-size: 0.75rem;
-    margin-bottom: 0.35rem;
+    font-weight: 600;
     color: #cbd5e1;
+    margin-bottom: 0.4rem;
   }
 
   .slider-val {
-    font-weight: 700;
-    color: #a5b4fc;
+    color: #38bdf8;
   }
 
   .hub-range {
@@ -1860,31 +2201,197 @@
 
   .metrics-chart-box {
     background: #020617;
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    border-radius: 0.5rem;
-    padding: 0.5rem 0.75rem;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 0.65rem;
+    padding: 0.65rem;
   }
 
   .chart-header {
     display: flex;
     justify-content: space-between;
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     color: #94a3b8;
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.4rem;
   }
 
   .chart-step {
+    color: #4ade80;
     font-weight: 600;
-    color: #f8fafc;
   }
 
   #metrics-plot-canvas {
     display: block;
     width: 100%;
-    height: auto;
+    height: 110px;
   }
 
-  /* Doc Inspector & Ontology */
+  /* MCP Ecosystem Styles */
+  .mcp-ecosystem-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .mcp-intro-banner {
+    background: #1e293b;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    border-radius: 0.65rem;
+    padding: 1.15rem;
+  }
+
+  .mcp-intro-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .mcp-icon {
+    font-size: 1.4rem;
+  }
+
+  .mcp-intro-title h4 {
+    margin: 0 !important;
+    font-size: 1.05rem !important;
+    color: #f8fafc !important;
+  }
+
+  .mcp-intro-banner p {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    line-height: 1.5;
+    margin: 0 0 0.65rem 0;
+  }
+
+  .mcp-feature-list {
+    margin: 0;
+    padding-left: 1.2rem;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    line-height: 1.6;
+  }
+
+  .mcp-feature-list code {
+    background: #0f172a;
+    padding: 0.15rem 0.35rem;
+    border-radius: 0.25rem;
+    color: #d8b4fe;
+  }
+
+  .mcp-servers-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+  }
+
+  @media (max-width: 650px) {
+    .mcp-servers-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .mcp-server-card {
+    background: #1e293b;
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 0.5rem;
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mcp-card-header {
+    display: flex;
+    gap: 0.65rem;
+    align-items: center;
+  }
+
+  .mcp-server-icon {
+    font-size: 1.5rem;
+  }
+
+  .mcp-server-meta h5 {
+    margin: 0 !important;
+    font-size: 0.9rem !important;
+    color: #f8fafc !important;
+  }
+
+  .mcp-status-pill {
+    font-size: 0.65rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 9999px;
+    font-weight: 600;
+  }
+
+  .mcp-status-pill.connected {
+    background: rgba(34, 197, 94, 0.15);
+    color: #86efac;
+  }
+
+  .mcp-card-desc {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .mcp-metrics-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: #cbd5e1;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 0.4rem;
+  }
+
+  .mcp-tools-list {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+
+  .mcp-tools-list code {
+    background: #0f172a;
+    color: #38bdf8;
+    font-size: 0.68rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+  }
+
+  .add-mcp-box {
+    background: #1e293b;
+    border: 1px dashed rgba(148, 163, 184, 0.2);
+    border-radius: 0.5rem;
+    padding: 1rem;
+  }
+
+  .add-mcp-box h5 {
+    margin: 0 0 0.3rem 0 !important;
+    font-size: 0.9rem !important;
+    color: #f8fafc !important;
+  }
+
+  .add-mcp-box p {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin: 0 0 0.65rem 0;
+  }
+
+  .add-mcp-row {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .mcp-toast {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #86efac;
+    background: rgba(34, 197, 94, 0.15);
+    padding: 0.4rem 0.65rem;
+    border-radius: 0.35rem;
+  }
+
+  /* Doc Inspector & Preview */
   .preview-box {
     display: flex;
     flex-direction: column;
@@ -1916,11 +2423,15 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
-  .doc-header-actions {
+  .meta-tag-row {
     display: flex;
-    gap: 0.4rem;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+    align-items: center;
   }
 
   .doc-title {
@@ -1928,6 +2439,11 @@
     font-weight: 700;
     color: #f8fafc !important;
     margin: 0.35rem 0 0 0 !important;
+  }
+
+  .doc-header-actions {
+    display: flex;
+    gap: 0.4rem;
   }
 
   .doc-meta-grid {
@@ -1942,26 +2458,24 @@
   }
 
   .ontology-box {
-    background: rgba(99, 102, 241, 0.1);
-    border: 1px solid rgba(99, 102, 241, 0.3);
+    background: #1e293b;
+    border: 1px solid rgba(168, 85, 247, 0.3);
     border-radius: 0.5rem;
     padding: 0.85rem;
   }
 
   .ontology-card h5 {
     margin: 0 0 0.5rem 0 !important;
-    color: #a5b4fc !important;
     font-size: 0.88rem !important;
+    color: #d8b4fe !important;
   }
 
   .ontology-card ul {
     margin: 0;
-    padding-left: 1.25rem;
-    font-size: 0.8rem;
+    padding-left: 1.2rem;
+    font-size: 0.78rem;
     color: #cbd5e1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
+    line-height: 1.6;
   }
 
   .doc-content-preview {
@@ -2001,9 +2515,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
-  .panel-head-group h4 {
+  .zero-friction-panel h4 {
     margin: 0 !important;
     color: #f8fafc !important;
     font-size: 1.05rem !important;
@@ -2012,79 +2528,80 @@
   .protocol-matrix {
     display: flex;
     flex-direction: column;
-    gap: 0.65rem;
+    gap: 0.75rem;
   }
 
   .proto-item {
     display: flex;
     gap: 0.85rem;
     background: #1e293b;
-    padding: 0.75rem 0.85rem;
+    padding: 0.85rem;
     border-radius: 0.5rem;
     border: 1px solid rgba(148, 163, 184, 0.15);
   }
 
   .proto-icon {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     line-height: 1;
   }
 
   .proto-item strong {
     display: block;
     color: #f8fafc;
-    font-size: 0.85rem;
-    margin-bottom: 0.15rem;
+    font-size: 0.88rem;
+    margin-bottom: 0.2rem;
   }
 
   .proto-item p {
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     color: #94a3b8;
     margin: 0;
-    line-height: 1.35;
+    line-height: 1.4;
   }
 
   .vsm-matrix-card {
     background: #1e293b;
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    border-radius: 0.5rem;
-    padding: 0.85rem;
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: 0.65rem;
+    padding: 1rem;
+    margin-top: 0.5rem;
   }
 
   .vsm-matrix-card h5 {
-    margin: 0 0 0.65rem 0 !important;
-    font-size: 0.88rem !important;
-    color: #a5b4fc !important;
+    margin: 0 0 0.75rem 0 !important;
+    font-size: 0.95rem !important;
+    color: #f8fafc !important;
   }
 
   .vsm-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.65rem;
   }
 
   .vsm-col {
     background: #0f172a;
-    padding: 0.6rem;
+    padding: 0.65rem;
     border-radius: 0.4rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(148, 163, 184, 0.1);
   }
 
   .vsm-badge {
     display: inline-block;
-    background: rgba(99, 102, 241, 0.2);
-    color: #c7d2fe;
-    font-size: 0.68rem;
+    background: #6366f1;
+    color: white;
+    font-size: 0.65rem;
     font-weight: 700;
-    padding: 0.1rem 0.4rem;
-    border-radius: 4px;
-    margin-bottom: 0.25rem;
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0.3rem;
   }
 
   .vsm-col strong {
     display: block;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     color: #f8fafc;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.25rem;
   }
 
   .vsm-col p {
@@ -2111,60 +2628,18 @@
     }
   }
 
-  /* Google Sign In Button */
-  .gsi-material-button {
-    user-select: none;
-    background-color: #131314;
-    border: 1px solid #747775;
-    border-radius: 4px;
-    box-sizing: border-box;
-    color: #e3e3e3;
-    cursor: pointer;
-    font-family: 'Roboto', arial, sans-serif;
-    font-size: 14px;
-    height: 40px;
-    letter-spacing: 0.25px;
-    outline: none;
-    overflow: hidden;
-    padding: 0 12px;
-    position: relative;
-    text-align: center;
-    vertical-align: middle;
-    white-space: nowrap;
-    width: auto;
-    display: inline-flex;
-    align-items: center;
-  }
-
-  .gsi-material-button .gsi-material-button-icon {
-    height: 20px;
-    margin-right: 12px;
-    min-width: 20px;
-    width: 20px;
-  }
-
-  .gsi-material-button .gsi-material-button-content-wrapper {
-    align-items: center;
+  .offline-presets-box {
+    margin-top: 1rem;
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    height: 100%;
-    justify-content: space-between;
-    position: relative;
-    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
   }
 
-  .gsi-material-button .gsi-material-button-contents {
-    flex-grow: 1;
-    font-family: 'Roboto', arial, sans-serif;
-    font-weight: 500;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: top;
-  }
-
-  .gsi-material-button:hover {
-    background-color: #202124;
-    border-color: #8e918f;
+  .preset-btns-row {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 </style>

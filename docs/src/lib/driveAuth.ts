@@ -22,56 +22,131 @@ const firebaseConfig = {
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(app);
 
-const provider = new GoogleAuthProvider();
-provider.addScope(DRIVE_READONLY_SCOPE);
+export interface ConnectedDriveAccount {
+  id: string; // e.g., email or uid
+  displayName: string;
+  email: string;
+  photoURL?: string;
+  accessToken: string;
+  label?: string; // e.g. "Personal Research", "Lab Workspace"
+  connectedAt: number;
+}
 
-// Token cached purely in-memory as required by workspace guidelines
-let cachedAccessToken: string | null = null;
+// In-memory registry of connected accounts (purely in-memory for security)
+let connectedAccounts: ConnectedDriveAccount[] = [];
+let activeAccountId: string | null = null;
 let isSigningIn = false;
 
+// Account change subscribers
+type AccountsListener = (accounts: ConnectedDriveAccount[], activeId: string | null) => void;
+const listeners: AccountsListener[] = [];
+
+export const subscribeAccounts = (listener: AccountsListener) => {
+  listeners.push(listener);
+  listener(connectedAccounts, activeAccountId);
+  return () => {
+    const idx = listeners.indexOf(listener);
+    if (idx !== -1) listeners.splice(idx, 1);
+  };
+};
+
+const notifyListeners = () => {
+  listeners.forEach((fn) => fn(connectedAccounts, activeAccountId));
+};
+
 export const initAuth = (
-  onAuthSuccess?: (user: User, token: string) => void,
+  onAuthSuccess?: (account: ConnectedDriveAccount) => void,
   onAuthFailure?: () => void
 ) => {
   return onAuthStateChanged(auth, async (user: User | null) => {
-    if (user && cachedAccessToken) {
-      if (onAuthSuccess) onAuthSuccess(user, cachedAccessToken);
+    if (user && connectedAccounts.length > 0) {
+      const active = getActiveAccount();
+      if (active && onAuthSuccess) onAuthSuccess(active);
     } else {
-      if (!isSigningIn) {
-        cachedAccessToken = null;
+      if (!isSigningIn && connectedAccounts.length === 0) {
         if (onAuthFailure) onAuthFailure();
       }
     }
   });
 };
 
-export const googleSignIn = async (): Promise<{ user: User; accessToken: string } | null> => {
+export const connectNewGoogleDrive = async (
+  label?: string
+): Promise<ConnectedDriveAccount> => {
   try {
     isSigningIn = true;
+    const provider = new GoogleAuthProvider();
+    provider.addScope(DRIVE_READONLY_SCOPE);
+    // Force prompt account selection so users can select different Google Accounts
+    provider.setCustomParameters({
+      prompt: "select_account",
+    });
+
     const result = await signInWithPopup(auth, provider);
     const credential = GoogleAuthProvider.credentialFromResult(result);
     if (!credential?.accessToken) {
       throw new Error("Failed to acquire Google Drive access token.");
     }
-    cachedAccessToken = credential.accessToken;
-    return { user: result.user, accessToken: cachedAccessToken };
+
+    const email = result.user.email || `drive-${Date.now()}@google.com`;
+    const accountId = result.user.uid || email;
+
+    const existingIndex = connectedAccounts.findIndex((a) => a.email === email || a.id === accountId);
+    const account: ConnectedDriveAccount = {
+      id: accountId,
+      displayName: result.user.displayName || "Google Drive Account",
+      email,
+      photoURL: result.user.photoURL || undefined,
+      accessToken: credential.accessToken,
+      label: label || (existingIndex !== -1 ? connectedAccounts[existingIndex]?.label : `Drive #${connectedAccounts.length + 1}`),
+      connectedAt: Date.now(),
+    };
+
+    if (existingIndex !== -1) {
+      connectedAccounts[existingIndex] = account;
+    } else {
+      connectedAccounts.push(account);
+    }
+
+    activeAccountId = account.id;
+    notifyListeners();
+    return account;
   } catch (error) {
-    console.error("Google sign in failed:", error);
+    console.error("Google Drive connection failed:", error);
     throw error;
   } finally {
     isSigningIn = false;
   }
 };
 
-export const getAccessToken = (): string | null => {
-  return cachedAccessToken;
+export const setActiveAccount = (id: string | null) => {
+  activeAccountId = id;
+  notifyListeners();
 };
 
-export const setAccessToken = (token: string | null) => {
-  cachedAccessToken = token;
+export const getActiveAccount = (): ConnectedDriveAccount | null => {
+  if (!activeAccountId) return connectedAccounts[0] || null;
+  return connectedAccounts.find((a) => a.id === activeAccountId) || connectedAccounts[0] || null;
 };
 
-export const logout = async () => {
+export const getAllAccounts = (): ConnectedDriveAccount[] => {
+  return [...connectedAccounts];
+};
+
+export const disconnectAccount = async (id: string) => {
+  connectedAccounts = connectedAccounts.filter((a) => a.id !== id);
+  if (activeAccountId === id) {
+    activeAccountId = connectedAccounts[0]?.id || null;
+  }
+  if (connectedAccounts.length === 0) {
+    await auth.signOut();
+  }
+  notifyListeners();
+};
+
+export const disconnectAll = async () => {
+  connectedAccounts = [];
+  activeAccountId = null;
   await auth.signOut();
-  cachedAccessToken = null;
+  notifyListeners();
 };

@@ -1,270 +1,101 @@
-<p align="center">
-  <a href="https://framework.blackboard.sh/electrobun/"><img src="https://github.com/blackboardsh/electrobun/assets/75102186/8799b522-0507-45e9-86e3-c3cfded1aa7c" alt="Logo" height=170></a>
-</p>
+# Systems Scientist Research Hub & Electrobun Metasystem
 
-<h1 align="center">Electrobun</h1>
+A unified cybernetic workbench combining **Electrobun's ultra-lightweight desktop runtime** with a **Metasystemic Research Ingestion Engine**. Seamlessly federates across **multiple Google Drive accounts** and external data providers via the **Model Context Protocol (MCP)**, providing feedback loop modeling and 1-click frictionless deployment pipelines for non-technical users.
 
-<div align="center">
-  Get started with a template <br />
-  <code><strong>hutch electrobun init</strong></code>
-</div>
+---
 
+## 🌟 Core Architecture & Capabilities
 
+### 1. Multi-Drive Federated Ingestion
+- **Multi-Tenant Authentication:** Connect multiple Google Drive accounts simultaneously (Personal, Research Lab, Enterprise).
+- **In-Memory Token Lifecycle:** Client-side OAuth with ephemeral memory storage. Zero credential persistence or server-side leakage.
+- **Universal Search & Filtering:** Filter across all connected drives by mime types (Google Docs, PDFs, Sheets, Code, Ontologies).
+- **Document Inspector & Ontology Extractor:** Deep document content inspection with instant extraction of causal relationships and cybernetic feedback dynamics.
 
-## What is Electrobun?
+### 2. Model Context Protocol (MCP) Gateway
+- **Standardized Resource Addressing:** Exposes documents and files as canonical MCP URIs (`mcp://google-drive/<account>/<fileId>`).
+- **Pre-Configured MCP Connectors:**
+  - **Google Drive MCP Gateway:** Resource streams across authenticated accounts.
+  - **Electrobun Desktop Host MCP:** Bridges windowing, micro-runtime bundles, and native cross-platform IPC.
+  - **ArXiv Systems Science MCP:** Ingests systems dynamics, cybernetics, and complex adaptive systems preprints.
+  - **GitHub Metasystem Bridge:** Tracks repository states, releases, and workflow automations.
+- **Custom MCP Server Integration:** Dynamic SSE / WebSocket connector for attaching custom team MCP servers (Notion, Obsidian, PostgreSQL, microservices).
 
-Electrobun aims to be a complete **solution-in-a-box** for building, updating, and shipping fast, compact, cross-platform desktop applications written in TypeScript.
-Hutch is the native build and workspace CLI. Cottontail is Electrobun's JSC-based default JavaScript runtime. Electrobun's platform layer combines Zig, Objective-C, and C++.
+### 3. Cybernetic Causal Loop Simulation Engine
+- **Stafford Beer's Viable System Model (VSM):** System 1 through System 5 layered architecture.
+- **Balancing (B1) & Reinforcing (R1) Loops:** Dynamic tracking of cognitive load damping versus adoption rate acceleration.
+- **Real-Time Interactive Canvas:** HTML5 Canvas particle simulation with live parameter adjustment:
+  - *UI Abstraction Level* (Zero-CLI factor)
+  - *Feedback Velocity*
+  - *Cognitive Friction Damping Factor*
+- **Continuous Metrics Charting:** Real-time Euler integration plots tracking Adoption Rate, Systemic Coherence, and Cognitive Load.
 
-Visit <a href="https://framework.blackboard.sh/electrobun/">https://framework.blackboard.sh/electrobun/</a> to see api documentation, guides, and more.
+### 4. Zero-Friction Non-Tech Deployment
+- **1-Click HTML Bundle Exporter:** Generates self-contained, zero-dependency interactive bundles runnable in any browser without installation or CLI configuration.
+- **Autonomous Deployment Manifests:** Generates standardized `metasystem-mcp-deploy.json` configurations ready for automated CI/CD.
 
-Install Hutch globally, then use it to create and build a project. Published
-templates include the exact Electrobun release they were tested with. In a
-hand-written project that pin is optional; without one, Hutch uses an
-npm-supplied paired default or floats on the active release channel. Hutch
-verifies and installs the resolved release's platform archive under
-`~/.hutch/releases/electrobun` and copies its SDKs into the project's generated
-`.hutch/devkit` sysroot:
+---
 
-```bash
-curl -fsSL https://hutch.blackboard.sh/hutch/install.sh | sh
-hutch electrobun init
-```
-
-Initialization requires network access to fetch the current template catalog
-and selected template. Later builds can reuse exact releases and managed
-toolchains that are already installed.
-
-Or bootstrap the same interactive initializer from npm or Bun. The single,
-dependency-free npm package downloads the exact paired Hutch archive from that
-version's Electrobun GitHub Release when needed, verifies and caches it, and
-forwards the command. The initializer also ensures a compatible global launcher
-for the generated project's `hutch` tasks. It does not carry or own the
-Electrobun runtime or SDKs:
-
-```bash
-npx electrobun init
-# or
-bunx electrobun init
-```
-
-Hutch's built-in npm-compatible resolver installs JavaScript dependencies by
-default and writes `hutch.lock`; `hutch pm exec` runs project-local package
-binaries. A project's `hutch.config.ts` may instead select npm, Bun, pnpm, Yarn,
-or a custom executable, and Hutch delegates package operations to that explicit
-choice. Package management is independent of whether the app's main process
-runs on Cottontail or Bun.
-
-Don't miss our:
-- self-extracting bundles that use Zstandard compression for compact distributables
-- a Zig-optimized BSDIFF implementation that can produce kilobyte-scale updates
-- `bundleCEF` flag to bundle and pin Chromium for those that want that tradeoff of consistency over file size
-- `bundleWGPU` that lets you use Bun Typescript -> WGPU to control a native GPU surface without a webview
-- Our Three.js and Babylon.js adapters that work directly in the Cottontail main process
-- Our `<electrobun-webview>` and `<electrobun-wgpu>` HTML elements that let you composite isolated webviews and native GPU surfaces into your UIs
-- so much more.
-
-**Project Goals**
-
-- Write typescript for the main process and webviews without having to think about it.
-- Isolation between main and webview processes with fast, typed, easy to implement RPC between them.
-- Small self-extracting app bundles when using the system webview
-- Small updates that use binary patches before falling back to a compressed full download
-- Provide everything you need in one tightly integrated workflow to start writing code in 5 minutes and distribute in 10.
-
-## Apps Built with Electrobun
-- [24agents](https://github.com/jhsu/24agents) - Hyperprompter
-- [act-track-ai](https://github.com/IrdanGu/act-track-ai) - personal desktop productivity tracker
-- [Agents Council](https://github.com/MrLesk/agents-council) - agent-to-agent MCP communication tool for feedback requests
-- [ai-wrapped](https://github.com/gulivan/ai-wrapped) - Wrapped-style desktop dashboard for your AI coding agent activity
-- [Audio TTS](https://github.com/blackboardsh/audio-tts) - desktop text-to-speech app using Qwen3-TTS for voice design, cloning, and generation
-- [aueio-player-desktop](https://github.com/tuomashatakka/aueio-player-desktop) - beautiful, minimal cross-platform audio player
-- [bestdiff](https://github.com/tesmond/bestdiff) - a git diff checker with curved connectors
-- [BuddyWriter](https://github.com/OxFrancesco/BuddyWriter) - BuddyWriter desktop and mobile apps
-- [burns](https://github.com/l3wi/burns) - a Smithers manager
-- [cbx-tool](https://github.com/jebin2/cbx-tool) - desktop app for reading and editing comic book archives (.cbz/.cbr)
-- [Co(lab)](https://blackboard.sh/colab/) - a hybrid web browser + code editor for deep work
-- [codlogs](https://github.com/tobitege/codlogs) - search and export local Codex sessions via CLI or desktop app
-- [Codex Agents Composer](https://github.com/MrLesk/codex-agents-composer) - desktop app for managing your Codex agents and their skills
-- [codex-devtools](https://github.com/gulivan/codex-devtools) - desktop inspector for Codex session data; browse conversations, search messages, and analyze agent activity
-- [Deskdown](https://github.com/guarana-studio/deskdown) - transform any web address into a desktop app in under 20 seconds
-- [Dictate](https://github.com/siddhantparadox/dictate) - Windows dictation app with local and BYOK cloud transcription
-- [dev-3.0](https://github.com/h0x91b/dev-3.0) - helps you not get lost while managing multiple AI agents across projects
-- [DOOM](https://github.com/blackboardsh/electrobun-doom) - DOOM implemented in 2 ways: bun -> (c doom -> bundled wgpu) and (full ts port bun -> bundled wgpu)
-- [dotlock](https://github.com/tsconfigdotjson/dotlock) - macOS desktop app for managing `.env` files across your projects
-- [electrobun-pdf](https://github.com/GijungKim/electrobun-pdf) - local-first PDF & DOCX editor for opening, annotating, and exporting documents without leaving your machine
-- [electrobun-rms](https://github.com/khanhthanhdev/electrobun-rms) - fast Electrobun desktop app template with React, Tailwind CSS, and Vite
-- [FLACK](https://github.com/BLCK-B/FLACK) - local audio player for Windows
-- [gloomberb](https://gloom.sh) - financial terminal for the rest of us
-- [golb](https://github.com/chrisdadev13/golb) - desktop AI coding workspace built with React, Vite, and Tailwind
-- [GOG Achievements GUI](https://github.com/timendum/gog-achievements-gui) - desktop app for managing GOG achievements
-- [groov](https://github.com/laurenzcodes/groov) - desktop audio deck monitor
-- [Guerilla Glass](https://github.com/okikeSolutions/guerillaglass) - open-source cross-platform creator studio for fast Record -> Edit -> Deliver workflows
-- [Invoke](https://getinvoke.com) - macOS UI automation & shortcut platform
-- [Marginalia](https://github.com/lars-hoeijmans/Marginalia) - a simple note taking app
-- [MarkBun](https://github.com/xiaochong/markbun) - fast, beautiful, Typora-like markdown desktop editor
-- [md-browse](https://github.com/needle-tools/md-browse) - a markdown-first browser that converts web pages to clean markdown
-- [moop](https://github.com/zrubinrattet/moop/) - desktop app for batch image optimization for the web
-- [Oursum](https://github.com/CarthyWorks/oursum) - private, offline-first personal expense tracker for importing, categorizing, and splitting transactions
-- [Patchline](https://github.com/adwaithks/Patchline) - lightweight desktop Git client for reading patches and line diffs, then staging and committing changes
-- [peekachu](https://github.com/needle-tools/peekachu) - password manager for AIs; store secrets in your OS keychain and scrub output so AI assistants never see actual values
-- [PiBun](https://github.com/khairold/pibun) - desktop GUI for the Pi coding agent with chat, terminal, git integration, and plugin system
-- [PLEXI](https://github.com/ianjamesburke/PLEXI) - a multi-dimensional terminal multiplexer for the agentic era
-- [Prometheus](https://github.com/opensourcectl/prometheus) - desktop utility toolbox for file cleanup, document manipulation, and image processing
-- [qCodelicious](https://github.com/rafaelsouzars/qcodelicious) - a simple code editor
-- [Quiver](https://ataraxy-labs.github.io/quiver/) - desktop app for GitHub PR reviews, merge conflict resolution, and AI commit messages
-- [remotecode.io](https://github.com/samuelfaj/remotecode.io) - continue local AI coding sessions (Claude Code or Codex) from your mobile device
-- [sirene](https://github.com/KevinBonnoron/sirene) - self-hosted multi-backend text-to-speech platform with voice cloning
-- [StoryForge](https://github.com/vrrdnt/StoryForge) - desktop app for Vintage Story players to switch between game versions, modpacks, servers, and accounts
-- [Tensamin Client](https://github.com/Tensamin/Client) - web, desktop, and mobile app for accessing Tensamin
-- [tokenpass-desktop](https://github.com/b-open-io/tokenpass-desktop) - desktop app that runs the Sigma Identity stack locally for Bitcoin-backed authentication
-- [typsmthng-desktop](https://github.com/aaditagrawal/typsmthng-desktop) - experimental desktop typing application
-- [VibesOS](https://github.com/popmechanic/VibesOS) - A GUI for Claude Code that makes it easy to vibe code simple, un-hackable apps
-- [VoiceVault](https://github.com/PJH720/VoiceVault) - AI-powered voice recorder with transcription, summarization, and RAG search
-- [warren](https://github.com/Loa212/warren) - open-source, peer-to-peer terminal mesh for accessing your machines from any device without SSH keys or config files
-- [whatsapp-reminder](https://github.com/FatahChan/whatsapp-reminder) - managed scheduled WhatsApp messages
-
-### Video Demos
-
-[![Audio TTS Demo](https://img.youtube.com/vi/Z4dNK1d6l6E/maxresdefault.jpg)](https://www.youtube.com/watch?v=Z4dNK1d6l6E)
-
-[![Co(lab) Demo](https://img.youtube.com/vi/WWTCqGmE86w/maxresdefault.jpg)](https://www.youtube.com/watch?v=WWTCqGmE86w)
-
-[![DOOM Demo](https://github.com/user-attachments/assets/6cc5f04a-6d97-4010-b65f-3f282d32590c)](https://x.com/YoavCodes/status/2028499038148903239?s=20)
-
-## Star History
-
-<p align="center">
-  <img src="./.github/assets/star-history-v1.jpg" alt="Electrobun star history four weeks after the v1 launch">
-  <br>
-  <em>star history 4 weeks after v1 launch</em>
-</p>
-
-## Contributing
-Electrobun is one piece of a vision I'm building. I'm optimizing for focus and execution. Issues and PRs can be used to share ideas, but there should be no expectation that I will review, respond to, or merge them.
-
-Ways to get involved:
-
-- Read the [Contribution guidelines](./CONTRIBUTING.md)
-- Follow us on X for updates <a href="https://twitter.com/BlackboardTech">@BlackboardTech</a> and <a href="https://twitter.com/YoavCodes">@YoavCodes</a> or on bluesky <a href="https://bsky.app/profile/yoav.codes">@yoav.codes</a>
-- Join the conversation on <a href="https://discord.gg/ueKE4tjaCE">Discord</a>
-- Create and participate in Github issues and discussions
-- Let me know what you're building with Electrobun
-
-## Development Setup
-Building apps with Electrobun is as easy as installing Hutch and running `hutch electrobun init`.
-
-**This section is for building Electrobun from source locally in order to contribute fixes to it.**
+## 🚀 Getting Started
 
 ### Prerequisites
+- Node.js (v18+) or Bun runtime
+- Modern web browser (Chrome, Edge, Safari, Firefox)
 
-Install Hutch globally before building Electrobun:
-
-```bash
-curl -fsSL https://hutch.blackboard.sh/hutch/install.sh | sh
-```
-
-On Windows PowerShell:
-
-```powershell
-& ([scriptblock]::Create((irm https://hutch.blackboard.sh/hutch/install.ps1)))
-```
-
-**macOS:**
-- Xcode command line tools
-- cmake (install via homebrew: `brew install cmake`)
-
-**Windows:**
-- Visual Studio Build Tools or Visual Studio with C++ development tools
-- cmake
-
-**Linux:**
-- build-essential package
-- cmake
-- webkit2gtk and GTK development packages
-
-On Ubuntu/Debian based distros: `sudo apt install build-essential cmake pkg-config libgtk-3-dev libwebkit2gtk-4.1-dev libayatana-appindicator3-dev libpipewire-0.3-dev librsvg2-dev`
-
-Linux applications also require the corresponding GTK 3, WebKitGTK 4.1,
-Ayatana AppIndicator, and librsvg runtime packages on end-user systems. See the
-[cross-platform development guide](./docs/src/content/docs/electrobun/guides/cross-platform-development.mdx#linux)
-for distro-specific install commands. The launcher reports the exact missing
-shared library when these dependencies are unavailable.
-Wayland screen-region capture additionally requires a working desktop portal,
-PipeWire, and the `libpipewire-0.3.so.0` runtime library (provided by
-`libpipewire-0.3-0`, or `libpipewire-0.3-0t64` on newer Ubuntu/Debian releases).
-
-### First-time Setup
+### Installation & Run
 
 ```bash
-git clone --recurse-submodules https://github.com/blackboardsh/electrobun.git
-cd electrobun/package
-npm ci
-hutch dev:clean
+# Clone the repository
+git clone https://github.com/371-minds/systems-scientist-hub.git
+cd systems-scientist-hub
+
+# Install workspace dependencies
+npm install
+
+# Start local development server on port 3000
+npm run dev
 ```
 
-### Development Workflow
+Visit `http://localhost:3000` or navigate directly to the workbench at `/systems-research-hub/`.
 
-```bash
-# All commands are run from the /package directory
-cd electrobun/package
+---
 
-# After making changes to source code
-hutch dev
+## 🛠️ Technology Stack
 
-# Exercise one repository template against the same local package/dist
-hutch dev:template hello-world
-
-# If you need a completely fresh start
-hutch dev:clean
-```
-
-`hutch dev` builds `package/dist` and runs Kitchen against that local
-Electrobun devkit. Running `hutch dev` directly from `kitchen/` continues to
-use the Electrobun version pinned in `kitchen/hutch.config.ts`.
-
-`hutch dev:template <template-name>` builds the same local devkit, runs the
-template's configured dependency installation, and starts its `dev` task against
-those local bytes. Repository templates stay unpinned for this workflow; the
-release publisher injects the shipped Electrobun version into each staged
-template archive.
-
-The native build generates `package/src/native/compile_flags.txt` from the
-compiler flags resolved for the current machine. clangd-compatible editors
-discover it automatically; rerun the build after changing native dependencies
-or system toolchains.
-
-With sibling `jsc`, `cottontail`, `dash-cloud`, and `electrobun` checkouts, use
-`--local` to additionally build and select the local JSC, Cottontail, and Hutch
-layers:
-
-```bash
-hutch dev --local
-```
-
-The first Hutch is globally installed. Stack preparation explicitly selects the
-completed local Hutch engine and Cottontail build for the remainder of the
-command.
-
-### Additional Commands
-
-All commands are run from the `/package` directory:
-
-- `hutch dev:canary` - Build and run kitchen sink in canary mode
-- `hutch dev:template <template-name>` - Build and run one template against the local devkit
-- `hutch build:dev` - Build Electrobun in development mode
-- `hutch build:release` - Build Electrobun in release mode
-
-### Debugging
-
-**macOS:** Use `lldb <path-to-bundle>/Contents/MacOS/launcher` and then `run` to debug release builds
-
-## Platform Support
-
-| OS | Status |
+| Layer | Technology |
 |---|---|
-| macOS 14+ | Official |
-| Windows 11+ | Official |
-| Ubuntu 24.04+ | Official |
-| Other Linux distros (gtk3, webkit2gtk-4.1) | Community |
-| Raspberry Pi | Unofficial fork: [kortexa-ai/electrobun (linux-wpe)](https://github.com/kortexa-ai/electrobun/tree/kortexa/linux-wpe) — follow the author [@francip](https://x.com/francip/status/2050149256053539059?s=20) |
+| **Framework** | [Astro](https://astro.build/) & [Starlight](https://starlight.astro.build/) |
+| **Desktop Runtime** | [Electrobun](https://framework.blackboard.sh/electrobun/) (Cottontail & System WebViews) |
+| **Authentication** | Google Workspace OAuth 2.0 (Client-side ephemeral) & Firebase Auth |
+| **Protocol** | Model Context Protocol (MCP) JSON-RPC 2.0 Schema |
+| **Visual Simulation** | HTML5 Canvas 2D Dynamic Physics Engine |
+| **Language** | TypeScript |
+
+---
+
+## 📁 Repository Structure
+
+```
+├── docs/
+│   ├── src/
+│   │   ├── components/
+│   │   │   └── SystemsResearchHub.astro   # Main research hub & simulation workbench
+│   │   ├── lib/
+│   │   │   ├── driveAuth.ts               # Multi-Drive ephemeral OAuth manager
+│   │   │   ├── driveApi.ts                # Federated Google Drive v3 client
+│   │   │   └── mcpRegistry.ts             # Model Context Protocol registry & gateway
+│   │   └── content/docs/
+│   │       ├── systems-research-hub.mdx   # Standalone Research Hub route
+│   │       ├── index.mdx                  # Landing page & integrated hub
+│   │       └── electrobun/                # Electrobun desktop runtime guides & APIs
+│   ├── astro.config.mjs                   # Astro & Starlight configuration
+│   └── package.json                       # Documentation workspace packages
+├── package.json                           # Root monorepo workspace manifest
+├── AGENTS.md                              # AI Agent & Metasystemic architectural directives
+└── README.md                              # Project documentation
+```
+
+---
+
+## 📄 License
+MIT License. Built for seamless research ingestion and zero-friction adoption across technical and non-technical stakeholders.

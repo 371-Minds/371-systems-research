@@ -8,6 +8,8 @@ export interface DriveFile {
   webViewLink?: string;
   thumbnailLink?: string;
   owners?: Array<{ displayName: string; emailAddress?: string }>;
+  sourceAccountLabel?: string;
+  sourceAccountEmail?: string;
 }
 
 export interface DriveSearchOptions {
@@ -27,7 +29,8 @@ const MIME_MAPPING: Record<string, string> = {
 
 export async function listDriveFiles(
   accessToken: string,
-  options: DriveSearchOptions = {}
+  options: DriveSearchOptions = {},
+  accountMeta?: { email?: string; label?: string }
 ): Promise<{ files: DriveFile[]; nextPageToken?: string }> {
   const clauses: string[] = ["trashed = false"];
 
@@ -61,7 +64,17 @@ export async function listDriveFiles(
     throw new Error(`Google Drive API error (${res.status}): ${errorText}`);
   }
 
-  return await res.json();
+  const data = await res.json();
+  const files: DriveFile[] = (data.files || []).map((f: any) => ({
+    ...f,
+    sourceAccountLabel: accountMeta?.label,
+    sourceAccountEmail: accountMeta?.email,
+  }));
+
+  return {
+    files,
+    nextPageToken: data.nextPageToken,
+  };
 }
 
 export async function fetchFileContentPreview(
